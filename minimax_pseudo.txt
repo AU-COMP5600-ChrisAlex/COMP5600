@@ -1,0 +1,36 @@
+alpha-beta(path, depth, isMax, alpha, beta)
+{
+
+  node = path.lastNode
+
+  if depth==0 or isTerminal(node) or state in path
+  {
+    return h(node)
+  }
+
+
+  if(isMax)
+  {
+    foreach child of node
+    {
+      if child not in path
+      {
+         alpha = max(alpha, alpha-beta(path.append(child), depth-1, False, alpha, beta)
+         if (beta <= alpha)
+           {break;}
+      }
+    return alpha
+  }
+  else
+  {
+    foreach child of node
+    {
+       if child not in path
+       {
+          beta = min(beta, alpha-beta(path.append(child), depth-1, True, alpha, beta)
+          if(beta <= alpha)
+           {break;}
+       }
+     } 
+    return beta
+  }

@@ -1,0 +1,28 @@
+
+
+
+
+h(state) = security(Me) - security(Opponent)
+
+
+security(player)
+{
+	value = 0
+	foreach bin in player's row 
+		value += bin.securityValue * bin.contents
+
+}
+
+
+
+
+securityValues:
+  5   4   3   2   1
+---------------------
+|   |   |   |   |   |	US
+---------------------
+|   |   |   |   |   |	Opponent
+---------------------
+  1   2   3   4   5
+
+
