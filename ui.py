@@ -34,6 +34,17 @@ class UI:
 
         #clear the screen
         UI.stdscr.erase()
+	curses.start_color()
+	curses.use_default_colors()
+	curses.init_pair(1,curses.COLOR_BLUE, -1)
+	curses.init_pair(2,curses.COLOR_RED, -1)
+	curses.init_pair(3,curses.COLOR_GREEN, -1)
+
+
+	curses.curs_set(0)
+        UI.stdscr.move(UI._debugstart,0)
+        UI.stdscr.leaveok(0)
+
 
         self.boardWin = None
 
@@ -71,6 +82,9 @@ class UI:
         if self.boardWin == None:
             self.boardWin = UI.stdscr.subwin(5, (len(board) * ( UI._boardbinsize + 1)) + 1,
                                     UI._boardrow, UI._boardcol) 
+
+            self.boardWin.leaveok(0)
+	    self.boardWin.attron(curses.color_pair(1))
             self._drawGrid();
 
         #put the numbers in their cells
@@ -79,13 +93,13 @@ class UI:
                           '{0:^{width}n}'.format(
                           board.getBin(TOP_PLAYER,i),
                           width=UI._boardbinsize),
-                          UI._boardbinsize)
+                          UI._boardbinsize, curses.color_pair(2))
 
             self.boardWin.addnstr(3,1+((i-1)*(UI._boardbinsize+1)),
                           '{0:^{width}n}'.format(
                           board.getBin(BOTTOM_PLAYER,len(board)+1-i),
                           width=UI._boardbinsize),
-                          UI._boardbinsize)
+                          UI._boardbinsize, curses.color_pair(3))
 
         self.boardWin.noutrefresh()
         curses.doupdate()
