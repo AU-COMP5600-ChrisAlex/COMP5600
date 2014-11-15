@@ -1,22 +1,27 @@
 #!/usr/bin/python
 
 from board import *
+from gameconstants import *
 from ui import UI
 import curses
 
 
 
 def startProg(screen):
-    b = Board(10,4);
+    
+
     ui = UI(screen);
-    ui.drawState(b)
+
+    b = Board(10,4);
+
+    #ui.drawState(b)
 
     UI.stdscr.getch()
 
-    b.move(TOP_PLAYER, 4)
-    ui.drawState(b)
+    #b.move(TOP_PLAYER, 4)
+    #ui.drawState(b)
 
-    UI.stdscr.getch()
+    #UI.stdscr.getch()
 
 
     

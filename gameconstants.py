@@ -8,8 +8,8 @@ DEBUG = True
 class GameConstants:
    numRows = 0 
    numPebbles = 0
-   numPlys = 0
-   stepThrough = False
    p1Human = False
    p2Human = False
+   numPlys = 0
+   stepThrough = False
     

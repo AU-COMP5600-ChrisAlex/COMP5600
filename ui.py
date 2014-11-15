@@ -1,16 +1,19 @@
 #!/usr/bin/python
 
 import curses
+import curses.textpad as textpad
 import atexit
 
-TOP_PLAYER    = 0
-BOTTOM_PLAYER = 1
+from gameconstants import *
 
-DEBUG = True
+
+
 
 class UI:
     #constant stdscr
     stdscr = None;
+
+    #User values
 
 
     #define some constants which define where things are placed on the screen
@@ -19,6 +22,26 @@ class UI:
     _boardbinsize = 4      #how large each bin of the board is
 
     _debugstart = 10
+
+    @staticmethod
+    def debug(s):
+        if DEBUG:
+            if UI.stdscr == None:
+                print s
+            else:
+                UI.stdscr.move(UI._debugstart,0)
+                UI.stdscr.insertln()
+                UI.stdscr.insstr(s)
+ 
+    @staticmethod
+    def userError(s, line=9):
+        if UI.stdscr == None:
+            print s
+        else:
+            UI.stdscr.move(line,0)
+            UI.stdscr.clrtoeol()
+            UI.stdscr.insstr(s,curses.color_pair(2))
+ 
 
 
     def __init__(self, screen):
@@ -44,22 +67,85 @@ class UI:
         UI.stdscr.move(UI._debugstart,0)
         UI.stdscr.leaveok(0)
 
-
-
         self.boardWin = None
 
+        self.askSetupQuestions()
 
+    def numberInput(self,row,col,size,min,max):
+        s = ""
+        s = UI.stdscr.getstr(row,col,size)
+        while (not s.isdigit()) or ( int(s) < min or int(s) > max ):
+            UI.userError("You must enter a number between %d and %d!" % (min,max))
+            UI.stdscr.move(row,col)
+            UI.stdscr.clrtoeol()
+            s = UI.stdscr.getstr(row,col,size)
+        UI.userError("")
 
-    @staticmethod
-    def debug(s):
-        if DEBUG:
-            if UI.stdscr == None:
-                print s
-            else:
-                UI.stdscr.move(UI._debugstart,0)
-                UI.stdscr.insertln()
-                UI.stdscr.insstr(s)
+    def optionInput(self,row,col,size,options):
+        s = ""
+        good = False
+        while not good:
+            s = UI.stdscr.getstr(row,col,size).lower()
+            for opt in options: 
+                if s == opt[:len(s)]:
+                    UI.stdscr.addstr(row,col,opt)
+                    good = True
+                    UI.userError("");
+                    return opt
+
+            err = "You just enter one of: "
+            for opt in options:
+                err += opt[0] + "[" + opt[1:] + "], "
+            UI.userError(err);
+            UI.stdscr.move(row,col)
+            UI.stdscr.clrtoeol()
+
+    def askSetupQuestions(self):
+
+        UI.stdscr.erase()
+
+        UI.stdscr.addstr(1,1, "Number of Rows    : ")
+        UI.stdscr.addstr(2,1, "Number of Pebbles : ")
+        UI.stdscr.addstr(3,1, "P1 [human/comp]   : " ,curses.color_pair(2))
+        UI.stdscr.addstr(4,1, "P2 [human/comp]   : " ,curses.color_pair(3))
+        UI.stdscr.addstr(5,1, "Number of Plys    : ")
+        UI.stdscr.addstr(6,1, "Run/Step          : ")
         
+        UI.stdscr.move(1,21)
+	curses.curs_set(1)
+        curses.echo()
+
+        UI.stdscr.noutrefresh()
+        curses.doupdate()
+    
+        #get Number of Rows
+        GameConstants.numRows = self.numberInput(1,21,2,2,10)
+        #get Number of Pebbles
+        GameConstants.numRows = self.numberInput(2,21,4,0,1000)
+
+        #get P1 human/comp
+        s = self.optionInput(3,21,8,["human", "computer"])
+        if s == "human": p1Human = True
+        else:            p1Human = False
+
+        #get P2 human/comp
+        s = self.optionInput(4,21,8,["human", "computer"])
+        if s == "human": p2Human = True
+        else:            p2Human = False
+
+        #get numPlys
+        s = self.numberInput(5,21,3,1,50)
+        
+        #get run/step
+        s = self.optionInput(6,21,5,["run", "step"])
+        if s == "human": p2Human = True
+        else:            p2Human = False
+
+
+        curses.noecho()
+        UI.stdscr.erase()
+	curses.curs_set(0)
+
     def _drawGrid(self):
         self.boardWin.border()
 
