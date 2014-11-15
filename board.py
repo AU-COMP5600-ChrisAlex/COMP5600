@@ -86,7 +86,7 @@ class Board:
         for i in range(0, cols):
             p1Sum = p1Sum + self.p1[i]
             p2Sum = p2Sum + self.p2[i]
-        if p1Sum == 0 || p2Sum == 0:
+        if p1Sum == 0 or p2Sum == 0:
             return True
         else:
             return False
