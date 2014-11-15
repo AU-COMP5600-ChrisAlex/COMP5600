@@ -1,6 +1,6 @@
 from path_node import *
 from heuristic import *
-from gameconstants import *
+import gameconstants
 
 def alpha_beta(path, depth, isMax, alpha, beta):
 
@@ -13,7 +13,7 @@ def alpha_beta(path, depth, isMax, alpha, beta):
 
 	if isMax:
 		for i in range(0, boardState.cols):
-			childBoardState = boardState.move(TOP_PLAYER, i)
+			childBoardState = boardState.move(gameconstants.TOP_PLAYER, i)
 			if !path.pathContains(childBoardState):
 				node.setNext(childBoardState)
 				alpha = max(alpha, alpha_beta(path, depth - 1, False, alpha, beta))
@@ -22,7 +22,7 @@ def alpha_beta(path, depth, isMax, alpha, beta):
 		return alpha
 	else:	# isMin
 		for i in range(0, boardState.cols):
-			childBoardState = boardState.move(BOTTOM_PLAYER, i)
+			childBoardState = boardState.move(gameconstants.BOTTOM_PLAYER, i)
 			if !path.pathContains(childBoardState):
 				node.setNext(childBoardState)
 				beta = min(beta, alpha_beta(path, depth - 1, True, alpha, beta))

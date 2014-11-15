@@ -1,5 +1,5 @@
 from board import *
-from gameconstants import *
+import gameconstants 
 
 class Heuristic:
 
@@ -32,8 +32,10 @@ class Heuristic:
 
 
 if __name__ == "__main__":
-	board = Board(4, 4)
+        gameconstants.numRows = 4
+        gameconstants.numPebbles=4
+	board = Board()
 	h = Heuristic(4)
 	print h.getValue(board)
-	newBoard = board.move(TOP_PLAYER, 1)
+	newBoard = board.move(gameconstants.TOP_PLAYER, 1)
 	print h.getValue(newBoard)

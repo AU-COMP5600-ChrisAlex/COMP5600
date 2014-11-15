@@ -3,27 +3,28 @@
 
 import array
 from ui import UI
-from gameconstants import *
+import gameconstants 
 
 
 class Board:
 
-    def __init__(self, cols, starting_pebbles, player1=None, player2=None):
-        self.cols=cols
-        self.startPebs = starting_pebbles
+    def __init__(self, player1=None, player2=None):
+
+        self.cols=gameconstants.numRows
+        self.startPebs = gameconstants.numPebbles
 
         if player1==None and player2==None:
-            self.p1=array.array("I",(starting_pebbles,)*cols)
-            #self.p1=array.array("I",range(1,cols+1))
+            self.p1=array.array("I",(self.startPebs,)*self.cols)
+            #self.p1=array.array("I",range(1,self.cols+1))
 
             self.p2=array.array("I")
             self.p2.extend(self.p1)
         else:
-            self.p1 = array.array("I",(0,)*cols)
+            self.p1 = array.array("I",(0,)*self.cols)
             self.p2=array.array("I")
             self.p2.extend(self.p1)
             #copy values by value
-            for i in range(0, cols):
+            for i in range(0, self.cols):
                 self.p1[i] = player1[i]
                 self.p2[i] = player2[i]
             
@@ -44,13 +45,13 @@ class Board:
             raise IndexError("Invalid Bin")
 
         # create new board state
-        newBoardState = Board(self.cols, self.startPebs, self.p1, self.p2)
+        newBoardState = Board(self.p1, self.p2)
 
         # determine which player
-        if player == TOP_PLAYER:
+        if player == gameconstants.TOP_PLAYER:
             movefrom = newBoardState.getPlayer1()
             moveto   = newBoardState.getPlayer2()
-        elif player == BOTTOM_PLAYER:
+        elif player == gameconstants.BOTTOM_PLAYER:
             movefrom = newBoardState.getPlayer2()
             moveto   = newBoardState.getPlayer1()
         else:
@@ -82,9 +83,9 @@ class Board:
         if bin-1 < 0 or bin > self.cols:
             raise IndexError("Invalid Bin")
 
-        if player == TOP_PLAYER:
+        if player == gameconstants.TOP_PLAYER:
             return self.p1[bin-1]
-        elif player == BOTTOM_PLAYER:
+        elif player == gameconstants.BOTTOM_PLAYER:
             return self.p2[bin-1]
         else:
             raise ValueError("Invalid Player")

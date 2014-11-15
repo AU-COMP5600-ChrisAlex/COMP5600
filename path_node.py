@@ -1,5 +1,5 @@
 from board import *
-from gameconstants import *
+import gameconstants 
 
 class PathNode:
 
@@ -33,12 +33,15 @@ class PathNode:
 			return self.next.pathContains(boardState)
 
 if __name__ == "__main__":
-	board = Board(10, 4)
+        gameconstants.numRows = 10
+        gameconstants.numPebbles = 4
+	board = Board()
 	head = PathNode(board)
 
-	print head.getTail().getBoardState().getBin(TOP_PLAYER, 1)
+	print head.getTail().getBoardState().getBin(gameconstants.TOP_PLAYER, 1)
 
-	board2 = Board(10, 5)
+        gameconstants.numPebbles = 5
+	board2 = Board()
 	head.setNext(board2)
 
-	print head.getTail().getBoardState().getBin(TOP_PLAYER, 1)	
+	print head.getTail().getBoardState().getBin(gameconstants.TOP_PLAYER, 1)	

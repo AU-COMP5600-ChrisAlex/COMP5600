@@ -4,7 +4,7 @@ import curses
 import curses.textpad as textpad
 import atexit
 
-from gameconstants import *
+import gameconstants 
 
 
 
@@ -25,7 +25,7 @@ class UI:
 
     @staticmethod
     def debug(s):
-        if DEBUG:
+        if gameconstants.DEBUG:
             if UI.stdscr == None:
                 print s
             else:
@@ -80,6 +80,7 @@ class UI:
             UI.stdscr.clrtoeol()
             s = UI.stdscr.getstr(row,col,size)
         UI.userError("")
+        return int(s)
 
     def optionInput(self,row,col,size,options):
         s = ""
@@ -119,32 +120,37 @@ class UI:
         curses.doupdate()
     
         #get Number of Rows
-        GameConstants.numRows = self.numberInput(1,21,2,2,10)
+
+        gameconstants.numRows = self.numberInput(1,21,2,2,10)
+
         #get Number of Pebbles
-        GameConstants.numRows = self.numberInput(2,21,4,0,1000)
+        gameconstants.numPebbles = self.numberInput(2,21,4,0,1000)
 
         #get P1 human/comp
         s = self.optionInput(3,21,8,["human", "computer"])
-        if s == "human": p1Human = True
-        else:            p1Human = False
+        if s == "human": gameconstants.p1Human = True
+        else:            gameconstants.p1Human = False
 
         #get P2 human/comp
         s = self.optionInput(4,21,8,["human", "computer"])
-        if s == "human": p2Human = True
-        else:            p2Human = False
+        if s == "human": gameconstants.p2Human = True
+        else:            gameconstants.p2Human = False
 
         #get numPlys
-        s = self.numberInput(5,21,3,1,50)
+        numPlys = self.numberInput(5,21,3,1,50)
         
         #get run/step
         s = self.optionInput(6,21,5,["run", "step"])
-        if s == "human": p2Human = True
-        else:            p2Human = False
+        if s == "run": gameconstants.stepThrough = True
+        else:          gameconstants.stepThrough = False
 
 
         curses.noecho()
         UI.stdscr.erase()
+
 	curses.curs_set(0)
+        UI.stdscr.move(UI._debugstart,0)
+        UI.stdscr.leaveok(0)
 
     def _drawGrid(self):
         self.boardWin.border()
@@ -168,7 +174,8 @@ class UI:
     def drawState(self, board):
         #make a sub-window for the board
         if self.boardWin == None:
-            self.boardWin = UI.stdscr.subwin(5, (len(board) * ( UI._boardbinsize + 1)) + 1,
+        
+            self.boardWin = UI.stdscr.derwin(5, (gameconstants.numRows * ( UI._boardbinsize + 1)) + 1,
                                     UI._boardrow, UI._boardcol) 
 
             self.boardWin.leaveok(0)
@@ -179,13 +186,13 @@ class UI:
         for i in range(1,len(board)+1):
             self.boardWin.addnstr(1,1+((i-1)*(UI._boardbinsize+1)),
                           '{0:^{width}n}'.format(
-                          board.getBin(TOP_PLAYER,i),
+                          board.getBin(gameconstants.TOP_PLAYER,i),
                           width=UI._boardbinsize),
                           UI._boardbinsize, curses.color_pair(2))
 
             self.boardWin.addnstr(3,1+((i-1)*(UI._boardbinsize+1)),
                           '{0:^{width}n}'.format(
-                          board.getBin(BOTTOM_PLAYER,len(board)+1-i),
+                          board.getBin(gameconstants.BOTTOM_PLAYER,len(board)+1-i),
                           width=UI._boardbinsize),
                           UI._boardbinsize, curses.color_pair(3))
 

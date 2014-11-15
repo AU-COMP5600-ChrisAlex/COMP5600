@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from board import *
-from gameconstants import *
+import gameconstants
 from ui import UI
 import curses
 
@@ -12,20 +12,17 @@ def startProg(screen):
 
     ui = UI(screen);
 
-    b = Board(10,4);
+    b = Board();
 
-    #ui.drawState(b)
+    ui.drawState(b)
 
     UI.stdscr.getch()
-
-    #b.move(TOP_PLAYER, 4)
-    #ui.drawState(b)
-
-    #UI.stdscr.getch()
-
-
     
+    b.move(gameconstants.TOP_PLAYER, 4)
 
+    ui.drawState(b)
+
+    UI.stdscr.getch()
 
 
 if __name__ == "__main__":
