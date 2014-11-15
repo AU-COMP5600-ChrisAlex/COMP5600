@@ -73,6 +73,23 @@ class Board:
             return self.p2[bin-1]
         else:
             raise ValueError("Invalid Player")
+
+    def isEquivalent(self, boardState):
+        if boardState.p1 == self.p1:
+            if boardState.p2 == self.p2:
+                return True
+        return False
+
+    def isWon(self):
+        p1Sum = 0
+        p2Sum = 0
+        for i in range(0, cols):
+            p1Sum = p1Sum + self.p1[i]
+            p2Sum = p2Sum + self.p2[i]
+        if p1Sum == 0 || p2Sum == 0:
+            return True
+        else:
+            return False
         
     def toString(self):
         
