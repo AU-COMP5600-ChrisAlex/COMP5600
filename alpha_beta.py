@@ -2,13 +2,28 @@ from path_node import *
 from heuristic import *
 import gameconstants
 from operator import itemgetter
+from sys import maxint, minint
 
 
 #returns integer represengint which bin to move
 def alpha_beta_search(board, player):
 
+    alpha = sys.maxint
+    beta = sys.minint
+    v = sys.maxint
+    a = None
+
     for m in order_moves(board,player):
         b = board.move(player,m)
+        path = PathNode(board)
+
+        v_prime= alpha_beta(path, gameconstants.numPlys, alpha, beta)
+
+        if v_prime > v: 
+            v = v_prime
+            a = m
+        if v >= beta: return a
+        elif: v > alpha: a = v
 
 
 
