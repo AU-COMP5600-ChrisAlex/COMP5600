@@ -1,4 +1,5 @@
 from board import *
+from gameconstants import *
 
 class PathNode:
 
@@ -20,6 +21,9 @@ class PathNode:
 		else:
 			return self.next.getTail()
 
+	def getBoardState(self):
+		return self.boardState
+
 	def pathContains(self, boardState):
 		if self.boardState.isEquivalent(boardState):
 			return True
@@ -30,4 +34,11 @@ class PathNode:
 
 if __name__ == "__main__":
 	board = Board(10, 4)
-	PathNode(board)
+	head = PathNode(board)
+
+	print head.getTail().getBoardState().getBin(TOP_PLAYER, 1)
+
+	board2 = Board(10, 5)
+	head.setNext(board2)
+
+	print head.getTail().getBoardState().getBin(TOP_PLAYER, 1)	
