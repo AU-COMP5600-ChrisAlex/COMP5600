@@ -18,7 +18,7 @@ def startProg(screen):
 
     UI.stdscr.getch()
     
-    b.move(gameconstants.TOP_PLAYER, 4)
+    b = b.move(gameconstants.TOP_PLAYER, 4)
 
     ui.drawState(b)
 
