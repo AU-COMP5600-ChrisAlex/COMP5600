@@ -1,4 +1,5 @@
 from board import *
+from gameconstants import *
 
 class Heuristic:
 
@@ -9,7 +10,7 @@ class Heuristic:
 		# calculate the constant values ahead of time
 		self.constants = []
 		for i in range(0, length):
-			self.constants.append(i+1)
+			self.constants.append(length - i)
 
 	def getValue (self, board):
 		p1Bins = board.p1
@@ -20,13 +21,19 @@ class Heuristic:
 
 		for i in range(0, self.tableLen):
 			p1Sum = p1Sum + (p1Bins[i] * self.constants[i])
-			p2Sum = p2Sum + (p2Bins[self.tableLen - (i + 1)] 
-				* self.constants[self.tableLen - (i + 1)])
+			p2Sum = p2Sum + (p2Bins[i] * self.constants[i])
+
+		print "p1Sum:"
+		print  p1Sum
+		print "p2Sum:"
+		print  p2Sum
 
 		return p1Sum - p2Sum
 
 
 if __name__ == "__main__":
-	board = Board(10, 4)
-	h = Heuristic(10)
+	board = Board(4, 4)
+	h = Heuristic(4)
 	print h.getValue(board)
+	newBoard = board.move(TOP_PLAYER, 1)
+	print h.getValue(newBoard)
