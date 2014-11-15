@@ -25,7 +25,7 @@ def alpha_beta(path, depth, isMax, alpha, beta):
 			childBoardState = boardState.move(gameconstants.BOTTOM_PLAYER, i)
 			if !path.pathContains(childBoardState):
 				node.setNext(childBoardState)
-				alpha = max(alpha, alpha_beta(path, depth - 1, True, alpha, beta))
+				beta = min(alpha, alpha_beta(path, depth - 1, True, alpha, beta))
 				if beta <= alpha:
 					break
 		return beta
