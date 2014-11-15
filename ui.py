@@ -21,32 +21,34 @@ class UI:
     _debugstart = 10
 
 
-    def __init__(self):
-
+    def __init__(self, screen):
 
         if UI.stdscr == None:
-            #if the program crashes, make sure we end curses
-            atexit.register(curses.endwin)
+            UI.stdscr = screen
+        else:
+            raise RuntimeError("UI is already initalized!")
 
-            #begin curses
-            UI.stdscr = curses.initscr()
-            curses.noecho()
 
-        #clear the screen
-        UI.stdscr.erase()
+        curses.noecho()
 	curses.start_color()
 	curses.use_default_colors()
+
 	curses.init_pair(1,curses.COLOR_BLUE, -1)
 	curses.init_pair(2,curses.COLOR_RED, -1)
 	curses.init_pair(3,curses.COLOR_GREEN, -1)
 
+        #clear the screen
+        UI.stdscr.erase()
 
 	curses.curs_set(0)
         UI.stdscr.move(UI._debugstart,0)
         UI.stdscr.leaveok(0)
 
 
+
         self.boardWin = None
+
+
 
     @staticmethod
     def debug(s):
