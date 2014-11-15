@@ -19,8 +19,14 @@ class Board:
             self.p2=array.array("I")
             self.p2.extend(self.p1)
         else:
-            self.p1 = player1
-            self.p2 = player2
+            self.p1 = array.array("I",(0,)*cols)
+            self.p2=array.array("I")
+            self.p2.extend(self.p1)
+            #copy values by value
+            for i in range(0, cols):
+                self.p1[i] = player1[i]
+                self.p2[i] = player2[i]
+            
 
     def getCols(self):
         return self.cols
