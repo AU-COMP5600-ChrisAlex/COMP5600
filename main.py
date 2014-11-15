@@ -9,10 +9,14 @@ import curses
 
 def startProg(screen):
     
-
     ui = UI(screen);
-
     b = Board();
+
+
+
+
+
+
 
     ui.drawState(b)
 

@@ -1,6 +1,25 @@
 from path_node import *
 from heuristic import *
 import gameconstants
+from operator import itemgetter
+
+
+#returns integer represengint which bin to move
+def alpha_beta_search(board, player):
+
+    for m in order_moves(board,player):
+        b = board.move(player,m)
+
+
+
+def order_moves(board, player):
+    moves = []
+    for i in range(1, len(board) + 1):
+        if board.getBin(player, i) != 0:
+            moves.append((i,Heuristic.getValue(board.move(player, i))))
+
+    return sorted(moves,key=itemgetter(1))
+
 
 def alpha_beta(path, depth, isMax, alpha, beta):
 
