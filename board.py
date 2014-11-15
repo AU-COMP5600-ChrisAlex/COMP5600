@@ -2,11 +2,9 @@
 
 
 import array
-
 from ui import UI
+from gameconstants import *
 
-TOP_PLAYER    = 0
-BOTTOM_PLAYER = 1
 
 class Board:
 
