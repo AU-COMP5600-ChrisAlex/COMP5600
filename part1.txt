@@ -1,0 +1,207 @@
+﻿Heuristic:  
+
+
+We assign a ‘security value’ to each position on the board. This value represents how valuable pebbles in that bin are to the player. Bins that are further from the opponent’s side of the board are more secure, because it takes more plys to move the pebbles in that bin to the opponent’s side. The ‘total security’ of the player is the number of pebbles in each of their bins, multiplied by the security value of that bin. Our heuristic evaluates the total security of each player, and subtracts the opponent's security from the player’s security. The subtraction ensures that boards that favor the opponent will have a lower heuristic value than boards that favor the player. 
+The ‘security value’ of each bin was assigned linearly. Ie, the least secure bin has value 1, while the most secure bin has a value equal to the length of the board. We may decided to change the distribution of security values later on based on empirical experimentation.
+
+
+h(state) = security(Me) - security(Opponent)
+
+
+security(player)
+{
+  value = 0
+  foreach bin in player's row 
+    value += bin.securityValue * bin.contents
+  return value
+}
+
+
+
+
+
+
+
+
+securityValues:
+  5   4   3   2   1
+---------------------
+|   |   |   |   |   |          US
+---------------------
+|   |   |   |   |   |          Opponent
+---------------------
+  1   2   3   4   5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________
+
+
+Player A’s bins are on the top of the board when looking from a top-down view.
+
+
+Example A:
+   4           3           2           1
+2
+	2
+	2
+	2
+	2
+	2
+	2
+	2
+	   1           2           3           4
+Player A  : ( 4x2 + 3x2 + 2x2 + 1x2 )        = 20
+Player B  : ( 4x2 + 3x2 + 2x2 + 1x2 )         = 20
+h(state)  : ( PlayerA – PlayerB )                 = 0
+
+
+Example B:
+   4           3           2           1
+2
+	2
+	2
+	0
+	2
+	2
+	3
+	3
+	   1           2           3           4                
+Player A  : ( 4x2 + 3x2 + 2x2 + 1x0 )         = 18
+Player B  : ( 4x3 + 3x3 + 2x2 + 1x2 )         = 27
+h(state)  : ( PlayerA – PlayerB )                 = -9
+
+
+Example C:
+   4           3           2           1
+2
+	2
+	0
+	3
+	2
+	2
+	2
+	3
+	   1           2           3           4                
+Player A  : ( 4x2 + 3x2 + 2x0 + 1x3 )         = 17
+Player B  : ( 4x3 + 3x2 + 2x2 + 1x2 )         = 24
+h(state)  : ( PlayerA – PlayerB )                 = -7
+
+
+Example D:
+   4           3           2           1
+2
+	0
+	3
+	3
+	2
+	2
+	2
+	2
+	   1           2           3           4                
+Player A  : ( 4x2 + 3x0 + 2x3 + 1x3 )         = 17
+Player B  : ( 4x2 + 3x2 + 2x2 + 1x2 )         = 20
+h(state)  : ( PlayerA – PlayerB )                 = -3
+
+
+Example E:
+   4           3           2           1
+0
+	3
+	3
+	2
+	2
+	2
+	2
+	2
+	   1           2           3           4                
+Player A  : ( 4x0 + 3x3 + 2x3 + 1x2 )         = 17
+Player B  : ( 4x3 + 3x2 + 2x2 + 1x2 )         = 20
+h(state)  : ( PlayerA – PlayerB )                 = -3
+
+
+________________
+alpha-beta(path, depth, isMax, alpha, beta)
+{
+
+
+  node = path.lastNode
+
+
+  if depth==0 or isTerminal(node) or state in path
+  {
+    return h(node)
+  }
+
+
+
+
+  if(isMax)
+  {
+    foreach child in Order_Moves(node, isMax?player:opponent)
+    {
+      if child not in path
+      {
+         alpha = max(alpha, alpha-beta(path.append(child), depth-1, False, alpha, beta)
+         if (beta <= alpha)
+           {break;}
+      }
+    return alpha
+  }
+  else
+  {
+    foreach child in Order_Moves(node, isMax?opponent:player)
+    {
+       if child not in path
+       {
+          beta = min(beta, alpha-beta(path.append(child), depth-1, True, alpha, beta)
+          if(beta <= alpha)
+           {break;}
+       }
+     } 
+    return beta
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+Order_Moves(state, player) returns list of states
+{
+  list = nil
+  for i = 0 to board_length
+  {
+     if(state[player][i] != 0)
+          list.append(move(player,i))
+  }
+  sort list in descending order by heuristic value
+  return list
+}
+
+
+
+
+
+
+Move ordering: 
+
+
+        To order our moves, we simply sort the children based on the heuristic function we developed above. We figured the best criteria to order the moves would be based on how likely a particular state is to lead to a win state. Since our heuristic function already does this, we saw no reason to develop a separate algorithm.
