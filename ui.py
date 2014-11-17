@@ -207,3 +207,27 @@ class UI:
 
 
 
+
+def _uitest(screen):
+
+    gameconstants.numRows = 8 
+    gameconstants.numPebbles = 5
+
+    ui = UI(screen, False)
+    b = Board()
+
+    ui.drawState(b)
+    UI.stdscr.getch()
+    b = b.move(gameconstants.TOP_PLAYER, 4)
+    ui.drawState(b)
+    UI.stdscr.getch()
+
+if __name__ == "__main__":
+
+    from board import *
+    try:
+        curses.wrapper(_uitest)
+    except KeyboardInterrupt:
+        print "Keyboard Interrupt"
+
+
