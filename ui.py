@@ -160,6 +160,10 @@ class UI:
         UI.stdscr.move(UI._debugstart,0)
         UI.stdscr.leaveok(0)
 
+    def _refreshBoardWin(self):
+        self.boardWin.noutrefresh()
+        curses.doupdate()
+
     def _drawGrid(self):
         self.boardWin.border()
 
@@ -182,6 +186,7 @@ class UI:
     def drawState(self, board):
         #make a sub-window for the board
         if self.boardWin == None:
+            if(gameconstants.numRows < 1): raise ValueError("gameconstants.numRows too small!")
         
             self.boardWin = UI.stdscr.derwin(5, (gameconstants.numRows * ( UI._boardbinsize + 1)) + 1,
                                     UI._boardrow, UI._boardcol) 
@@ -204,9 +209,7 @@ class UI:
                           width=UI._boardbinsize),
                           UI._boardbinsize, curses.color_pair(UI.BOT_P_COLOR))
 
-        self.boardWin.noutrefresh()
-        curses.doupdate()
-
+        self._refreshBoardWin()
 
     #select a cell
     def _selectCell(self, player, bin):
@@ -238,9 +241,38 @@ class UI:
 
         #first, select the player's first cell
         selected = 1
+        newsel= 1
         self._selectCell(player,selected)
 
         #now, allow arrow keys, [hl], and [0-9] to select new cell. Enter confirms
+
+        done = False
+        while not done:
+            c = UI.stdscr.getch()
+
+            if c == ord('\n') or c == ord('\r'):
+                #return current selection (windows compatable?)
+                return selected
+            elif c == curses.KEY_LEFT or c == ord('h'):
+                newsel = selected - 1
+            elif c == curses.KEY_RIGHT or c == ord('l'): 
+                newsel = selected + 1
+            elif c >= ord('0') and c <= ord('9'):
+                newsel = c - ord('0')
+                if newsel == 0: newsel = 10
+            else: continue #do nothing, bad key
+            
+            if newsel > gameconstants.numRows: newsel = gameconstants.numRows
+            if newsel < 1: newsel = 1
+
+            if newsel != selected:
+                self._unselectCell(player, selected)
+                self._selectCell(player, newsel)
+                selected = newsel 
+                self._refreshBoardWin()
+                
+                
+
 
 
 
@@ -260,6 +292,8 @@ def _uitest(screen):
     b = Board()
 
     ui.drawState(b)
+
+    ui.interact(gameconstants.TOP_PLAYER)
 
 
     UI.stdscr.getch()
