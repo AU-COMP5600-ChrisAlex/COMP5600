@@ -13,7 +13,15 @@ class UI:
     #constant stdscr
     stdscr = None;
 
-    #User values
+    #color constants
+    BLUE_PAIR    = 1
+    RED_PAIR     = 2
+    GREEN_PAIR   = 3
+
+    BOARD_P_COLOR = BLUE_PAIR
+    TOP_P_COLOR   = RED_PAIR 
+    BOT_P_COLOR   = GREEN_PAIR 
+
 
 
     #define some constants which define where things are placed on the screen
@@ -40,7 +48,7 @@ class UI:
         else:
             UI.stdscr.move(line,0)
             UI.stdscr.clrtoeol()
-            UI.stdscr.insstr(s,curses.color_pair(2))
+            UI.stdscr.insstr(s,curses.color_pair(UI.RED_PAIR))
  
 
 
@@ -56,9 +64,9 @@ class UI:
 	curses.start_color()
 	curses.use_default_colors()
 
-	curses.init_pair(1,curses.COLOR_BLUE, -1)
-	curses.init_pair(2,curses.COLOR_RED, -1)
-	curses.init_pair(3,curses.COLOR_GREEN, -1)
+	curses.init_pair(UI.BLUE_PAIR ,curses.COLOR_BLUE, -1)
+	curses.init_pair(UI.RED_PAIR  ,curses.COLOR_RED, -1)
+	curses.init_pair(UI.GREEN_PAIR,curses.COLOR_GREEN, -1)
 
         #clear the screen
         UI.stdscr.erase()
@@ -107,8 +115,8 @@ class UI:
 
         UI.stdscr.addstr(1,1, "Number of Rows    : ")
         UI.stdscr.addstr(2,1, "Number of Pebbles : ")
-        UI.stdscr.addstr(3,1, "P1 [human/comp]   : " ,curses.color_pair(2))
-        UI.stdscr.addstr(4,1, "P2 [human/comp]   : " ,curses.color_pair(3))
+        UI.stdscr.addstr(3,1, "P1 [human/comp]   : " ,curses.color_pair(UI.TOP_P_COLOR))
+        UI.stdscr.addstr(4,1, "P2 [human/comp]   : " ,curses.color_pair(UI.BOT_P_COLOR))
         UI.stdscr.addstr(5,1, "Number of Plys    : ")
         UI.stdscr.addstr(6,1, "Run/Step          : ")
         
@@ -179,7 +187,7 @@ class UI:
                                     UI._boardrow, UI._boardcol) 
 
             self.boardWin.leaveok(0)
-	    self.boardWin.attron(curses.color_pair(1))
+	    self.boardWin.attron(curses.color_pair(UI.BOARD_P_COLOR))
             self._drawGrid();
 
         #put the numbers in their cells
@@ -188,22 +196,57 @@ class UI:
                           '{0:^{width}n}'.format(
                           board.getBin(gameconstants.TOP_PLAYER,i),
                           width=UI._boardbinsize),
-                          UI._boardbinsize, curses.color_pair(2))
+                          UI._boardbinsize, curses.color_pair(UI.TOP_P_COLOR))
 
             self.boardWin.addnstr(3,1+((i-1)*(UI._boardbinsize+1)),
                           '{0:^{width}n}'.format(
                           board.getBin(gameconstants.BOTTOM_PLAYER,len(board)+1-i),
                           width=UI._boardbinsize),
-                          UI._boardbinsize, curses.color_pair(3))
+                          UI._boardbinsize, curses.color_pair(UI.BOT_P_COLOR))
 
         self.boardWin.noutrefresh()
         curses.doupdate()
 
 
+    #select a cell
+    def _selectCell(self, player, bin):
+        #figure out which player we are, set which row to edit
+        if player == gameconstants.TOP_PLAYER: row = 1
+        elif player == gameconstants.BOTTOM_PLAYER: row = 3
+        else: raise ValueErrror("Invalid Player")
+    
+        #change attributes of bin
+        self.boardWin.chgat(row, 1+((bin-1)*(UI._boardbinsize+1)), UI._boardbinsize, curses.A_REVERSE)
+        
+    #unselect a cell
+    def _unselectCell(self, player, bin):
+        if player == gameconstants.TOP_PLAYER: 
+            row = 1
+            color = UI.TOP_P_COLOR
+        elif player == gameconstants.BOTTOM_PLAYER: 
+            row = 3
+            color = UI.BOT_P_COLOR
+        else: raise ValueErrror("Invalid Player")
+        
+        #change attributes of bin
+        self.boardWin.chgat(row, 1+((bin-1)*(UI._boardbinsize+1)), UI._boardbinsize, curses.color_pair(color))
+
+    #allows a human player to select a cell to move. Returns bin.
+    def interact(self, player):
+        if self.boardWin == None:
+            raise RuntimeError("No board has been drawn!")
+
+        #first, select the player's first cell
+        selected = 1
+        self._selectCell(player,selected)
+
+        #now, allow arrow keys, [hl], and [0-9] to select new cell. Enter confirms
+
+
+
+
     def __del__(self): #note: del is not gaurenteed to be called
-        curses.endwin()
-        #only available in python 3
-        #atexit.unregister(curses.endwin)
+        pass
 
 
 
@@ -217,6 +260,8 @@ def _uitest(screen):
     b = Board()
 
     ui.drawState(b)
+
+
     UI.stdscr.getch()
     b = b.move(gameconstants.TOP_PLAYER, 4)
     ui.drawState(b)
