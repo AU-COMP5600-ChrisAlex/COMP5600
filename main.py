@@ -9,6 +9,7 @@ import curses
 
 def startProg(screen):
     
+
     ui = UI(screen);
     b = Board();
 
@@ -30,6 +31,10 @@ def startProg(screen):
 
 
 if __name__ == "__main__":
-    curses.wrapper(startProg)
+    try:
+        curses.wrapper(startProg)
+    except KeyboardInterrupt:
+        print "Keyboard Interrupt"
+
     
    

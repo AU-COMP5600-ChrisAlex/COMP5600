@@ -44,7 +44,7 @@ class UI:
  
 
 
-    def __init__(self, screen):
+    def __init__(self, screen, askSetup=True):
 
         if UI.stdscr == None:
             UI.stdscr = screen
@@ -69,7 +69,7 @@ class UI:
 
         self.boardWin = None
 
-        self.askSetupQuestions()
+        if askSetup: self.askSetupQuestions()
 
     def numberInput(self,row,col,size,min,max):
         s = ""
