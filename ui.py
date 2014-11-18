@@ -75,7 +75,6 @@ class UI:
 
         self.boardWin = None
 
-<<<<<<< HEAD
         if askuser: self.askSetupQuestions()
 
     def numberInput(self,row,col,size,min,max):
