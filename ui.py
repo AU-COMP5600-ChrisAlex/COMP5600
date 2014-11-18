@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
 import curses
-import curses.textpad as textpad
-import atexit
 
 import gameconstants 
 
@@ -44,7 +42,7 @@ class UI:
  
 
 
-    def __init__(self, screen):
+    def __init__(self, screen, askuser=True):
 
         if UI.stdscr == None:
             UI.stdscr = screen
@@ -69,7 +67,8 @@ class UI:
 
         self.boardWin = None
 
-        self.askSetupQuestions()
+        if askuser: self.askSetupQuestions()
+
 
     def numberInput(self,row,col,size,min,max):
         s = ""
@@ -202,8 +201,6 @@ class UI:
 
     def __del__(self): #note: del is not gaurenteed to be called
         curses.endwin()
-        #only available in python 3
-        #atexit.unregister(curses.endwin)
 
 
 
