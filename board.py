@@ -8,6 +8,9 @@ import gameconstants
 
 class Board:
 
+    def __len__(self):
+        return self.cols
+
     def __init__(self, player1=None, player2=None):
 
         self.cols=gameconstants.numRows
@@ -23,17 +26,15 @@ class Board:
             self.p1 = array.array("I",(0,)*self.cols)
             self.p2=array.array("I")
             self.p2.extend(self.p1)
+            
             #copy values by value
             for i in range(0, self.cols):
                 self.p1[i] = player1[i]
                 self.p2[i] = player2[i]
             
-
     def getCols(self):
         return self.cols
 
-    def __len__(self):
-        return self.cols
 
     def move(self,player,bin):  
 
@@ -49,11 +50,11 @@ class Board:
 
         # determine which player
         if player == gameconstants.TOP_PLAYER:
-            movefrom = newBoardState.getPlayer1()
-            moveto   = newBoardState.getPlayer2()
+            movefrom = newBoardState.getPlayer(gameconstants.TOP_PLAYER)
+            moveto   = newBoardState.getPlayer(gameconstants.BOTTOM_PLAYER)
         elif player == gameconstants.BOTTOM_PLAYER:
-            movefrom = newBoardState.getPlayer2()
-            moveto   = newBoardState.getPlayer1()
+            movefrom = newBoardState.getPlayer(gameconstants.BOTTOM_PLAYER)
+            moveto   = newBoardState.getPlayer(gameconstants.TOP_PLAYER)
         else:
             raise ValueError("Invalid Player")
 
@@ -104,14 +105,15 @@ class Board:
             p2Sum = p2Sum + self.p2[i]
         if p1Sum == 0 or p2Sum == 0:
             return True
+        return False
+
+    def getPlayer(self, player):
+        if player == gameconstants.TOP_PLAYER:
+            return self.p1
+        elif player == gameconstants.BOTTOM_PLAYER:
+            return self.p2
         else:
-            return False
-
-    def getPlayer1(self):
-        return self.p1
-
-    def getPlayer2(self):
-        return self.p2
+            raise ValueError("Invalid Player")
         
     def toString(self):
         

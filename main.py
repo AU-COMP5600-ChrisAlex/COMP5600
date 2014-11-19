@@ -15,10 +15,6 @@ def startProg(screen):
 
 
 
-
-
-
-
     ui.drawState(b)
 
     UI.stdscr.getch()

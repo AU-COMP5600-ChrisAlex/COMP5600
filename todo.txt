@@ -1,0 +1,11 @@
+
+
+Implement board stoage as numpy arrays. This makes stuff fast
+  - Heuristic can be implemented by a dot-product
+  - Other array calculations can be sped up
+
+Look into PyPy - a JIT compiler that introduces alot of optimization
+
+Implement  path_node as an iterable list. There's probably a python builtin
+
+

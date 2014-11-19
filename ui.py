@@ -23,11 +23,14 @@ class UI:
 
 
     #define some constants which define where things are placed on the screen
-    _boardrow = 2          #row which to print the board
-    _boardcol = 2          #col which to print the board
     _boardbinsize = 4      #how large each bin of the board is
 
+    _boardrow = 3          #row which to print the board
+    _boardcol = 2          #col which to print the board
+
     _debugstart = 10
+    _instructline = 1
+    _instructcol = 2
 
     @staticmethod
     def debug(s):
@@ -76,6 +79,18 @@ class UI:
         self.boardWin = None
 
         if askuser: self.askSetupQuestions()
+
+
+    def clearInstructions(self):
+        UI.stdscr.move(UI._instructline,0)
+        UI.stdscr.clrtoeol()
+
+    #prints a line at the top of the screen, telling the user what to do
+    def printInstructions(self, str):
+        self.clearInstructions()
+        UI.stdscr.move(UI._instructline, UI._instructcol)
+        UI.stdscr.addstr(str)
+
 
     def numberInput(self,row,col,size,min,max):
         s = ""
@@ -232,10 +247,13 @@ class UI:
         #change attributes of bin
         self.boardWin.chgat(row, 1+((bin-1)*(UI._boardbinsize+1)), UI._boardbinsize, curses.color_pair(color))
 
-    #allows a human player to select a cell to move. Returns bin.
-    def interact(self, player):
-        if self.boardWin == None:
-            raise RuntimeError("No board has been drawn!")
+    #allows a human player to select a cell to move. Returns bin number.
+    def interact(self, player, board=None):
+        if self.boardWin == None
+            if board != None: self.drawState(board)
+            else: raise RuntimeError("No board has been drawn yet!")
+
+        self.printInstructions("Use the arrow keys or press a number to select a cell. Then press Enter to select");
 
         #first, select the player's first cell
         selected = 1
@@ -250,6 +268,7 @@ class UI:
 
             if c == ord('\n') or c == ord('\r'):
                 #return current selection (windows compatable?)
+                self.clearInstructions()
                 return selected
             elif c == curses.KEY_LEFT or c == ord('h'):
                 newsel = selected - 1
@@ -273,8 +292,6 @@ class UI:
 
 
 
-
-
     def __del__(self): #note: del is not gaurenteed to be called
         curses.endwin()
 
@@ -291,11 +308,9 @@ def _uitest(screen):
 
     ui.drawState(b)
 
-    ui.interact(gameconstants.TOP_PLAYER)
-
-
-    UI.stdscr.getch()
-    b = b.move(gameconstants.TOP_PLAYER, 4)
+    bin = ui.interact(gameconstants.TOP_PLAYER)
+    b = b.move(gameconstants.TOP_PLAYER, bin) 
+    
     ui.drawState(b)
     UI.stdscr.getch()
 
