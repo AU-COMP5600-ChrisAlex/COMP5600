@@ -1,12 +1,11 @@
 #!/usr/bin/python
 
-import gameconstants
-
+from player import Player
 
 class Human_Player(Player):
 
     def __init__(self, player, ui):
-        super(Alpha_Beta_Player, self,).init(player_num=player)
+        Player.__init__(self, player_num=player)
         self.ui = ui
 
     def move(self, board):

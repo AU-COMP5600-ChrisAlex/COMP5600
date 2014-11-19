@@ -1,4 +1,4 @@
-﻿Heuristic:  
+Heuristic:  
 
 
 We assign a ‘security value’ to each position on the board. This value represents how valuable pebbles in that bin are to the player. Bins that are further from the opponent’s side of the board are more secure, because it takes more plys to move the pebbles in that bin to the opponent’s side. The ‘total security’ of the player is the number of pebbles in each of their bins, multiplied by the security value of that bin. Our heuristic evaluates the total security of each player, and subtracts the opponent's security from the player’s security. The subtraction ensures that boards that favor the opponent will have a lower heuristic value than boards that favor the player. 

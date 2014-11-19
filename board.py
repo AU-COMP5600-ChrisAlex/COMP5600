@@ -98,14 +98,13 @@ class Board:
         return False
 
     def isWon(self):
-        p1Sum = 0
-        p2Sum = 0
-        for i in range(0, cols):
-            p1Sum = p1Sum + self.p1[i]
-            p2Sum = p2Sum + self.p2[i]
-        if p1Sum == 0 or p2Sum == 0:
-            return True
-        return False
+        return (self.whoWon != -1)
+
+    #TODO: MAKE FASTER WITH NUMPY
+    def whoWon(self):
+        if sum(self.p1) == 0: return gameconstants.TOP_PLAYER
+        elif sum(self.p2): return gameconstants.BOTTOM_PLAYER
+        else: return -1
 
     def getPlayer(self, player):
         if player == gameconstants.TOP_PLAYER:

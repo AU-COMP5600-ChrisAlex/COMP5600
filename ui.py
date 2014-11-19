@@ -173,7 +173,7 @@ class UI:
         UI.stdscr.move(UI._debugstart,0)
         UI.stdscr.leaveok(0)
 
-    def _refreshBoardWin(self):
+    def refreshBoardWin(self):
         self.boardWin.noutrefresh()
         curses.doupdate()
 
@@ -222,7 +222,7 @@ class UI:
                           width=UI._boardbinsize),
                           UI._boardbinsize, curses.color_pair(UI.BOT_P_COLOR))
 
-        self._refreshBoardWin()
+        self.refreshBoardWin()
 
     #select a cell
     def _selectCell(self, player, bin):
@@ -249,7 +249,7 @@ class UI:
 
     #allows a human player to select a cell to move. Returns bin number.
     def interact(self, player, board=None):
-        if self.boardWin == None
+        if self.boardWin == None:
             if board != None: self.drawState(board)
             else: raise RuntimeError("No board has been drawn yet!")
 
@@ -286,7 +286,7 @@ class UI:
                 self._unselectCell(player, selected)
                 self._selectCell(player, newsel)
                 selected = newsel 
-                self._refreshBoardWin()
+                self.refreshBoardWin()
                 
                 
 
