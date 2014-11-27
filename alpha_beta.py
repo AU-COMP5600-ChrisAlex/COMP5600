@@ -34,16 +34,13 @@ class Alpha_Beta_Player(Player):
 
             v_prime= self._alpha_beta(path, gameconstants.numPlys, False, alpha, beta)
 
-            UI.debug("move: " + str(m) + " heuristic: " + str(h) + " v': " + str(v_prime));
+            #UI.debug("move: " + str(m) + " heuristic: " + str(h) + " v': " + str(v_prime));
 
             if v_prime > v: 
                 v = v_prime
                 a = m
             if v >= beta: return a
             elif v > alpha: alpha = v
-
-            UI.debug("a: " + str(a))
-
 
         return a
 

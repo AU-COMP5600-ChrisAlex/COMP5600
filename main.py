@@ -35,14 +35,10 @@ def startProg(screen):
     c = '' 
     while c != ord('q'):
         c = UI.stdscr.getch()
-        m = gameconstants.p1.move(b)
-
-        UI.debug(m)
-        c = UI.stdscr.getch()
-
-        b = b.move(gameconstants.p1.player, m)
+        b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
         ui.drawState(b)
-
+        b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
+        ui.drawState(b)
 
     
     #b = b.move(gameconstants.TOP_PLAYER, 4)
