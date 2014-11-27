@@ -37,10 +37,10 @@ class Heuristic:
 		    p1Sum = p1Sum + (p1Bins[i] * Heuristic._constants[i])
 		    p2Sum = p2Sum + (p2Bins[i] * Heuristic._constants[i])
 
-            UI.debug("p1Sum: " + str(p1Sum))
-            UI.debug("p2Sum: " + str(p2Sum))
-            UI.debug("total: " + str(p1Sum - p2Sum))
-            UI.debug("-----------")
+            #UI.debug("p1Sum: " + str(p1Sum))
+            #UI.debug("p2Sum: " + str(p2Sum))
+            #UI.debug("total: " + str(p1Sum - p2Sum))
+            #UI.debug("-----------")
 
 	    return p1Sum - p2Sum
 

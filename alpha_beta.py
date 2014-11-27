@@ -34,11 +34,16 @@ class Alpha_Beta_Player(Player):
 
             v_prime= self._alpha_beta(path, gameconstants.numPlys, False, alpha, beta)
 
+            UI.debug("move: " + str(m) + " heuristic: " + str(h) + " v': " + str(v_prime));
+
             if v_prime > v: 
                 v = v_prime
                 a = m
             if v >= beta: return a
-            elif v > alpha: a = v
+            elif v > alpha: alpha = v
+
+            UI.debug("a: " + str(a))
+
 
         return a
 
@@ -61,7 +66,7 @@ class Alpha_Beta_Player(Player):
                     return Heuristic.getValue(boardState, self.player)
 
             if isMax:
-                    for i in range(0, boardState.cols):
+                    for i in range(1, boardState.cols+1):
                             childBoardState = boardState.move(gameconstants.TOP_PLAYER, i)
                             if not path.pathContains(childBoardState):
                                     node.setNext(childBoardState)
@@ -70,7 +75,7 @@ class Alpha_Beta_Player(Player):
                                             break
                     return alpha
             else:	# isMin
-                    for i in range(0, boardState.cols):
+                    for i in range(1, boardState.cols+1):
                             childBoardState = boardState.move(gameconstants.BOTTOM_PLAYER, i)
                             if not path.pathContains(childBoardState):
                                     node.setNext(childBoardState)

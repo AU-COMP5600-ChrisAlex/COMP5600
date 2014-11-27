@@ -308,9 +308,6 @@ class UI:
                 self.refreshBoardWin()
                 
                 
-
-
-
     def __del__(self): #note: del is not gaurenteed to be called
         curses.endwin()
 
