@@ -40,7 +40,7 @@ class UI:
             else:
                 UI.stdscr.move(UI._debugstart,0)
                 UI.stdscr.insertln()
-                UI.stdscr.insstr(s)
+                UI.stdscr.insstr(str(s))
  
     @staticmethod
     def userError(s, line=9):
@@ -93,6 +93,7 @@ class UI:
 
 
     def numberInput(self,row,col,size,min,max):
+        UI.stdscr.move(row,col)
         s = ""
         s = UI.stdscr.getstr(row,col,size)
         while (not s.isdigit()) or ( int(s) < min or int(s) > max ):
@@ -126,44 +127,62 @@ class UI:
 
         UI.stdscr.erase()
 
-        UI.stdscr.addstr(1,1, "Number of Rows    : ")
-        UI.stdscr.addstr(2,1, "Number of Pebbles : ")
-        UI.stdscr.addstr(3,1, "P1 [human/comp]   : " ,curses.color_pair(UI.TOP_P_COLOR))
-        UI.stdscr.addstr(4,1, "P2 [human/comp]   : " ,curses.color_pair(UI.BOT_P_COLOR))
-        UI.stdscr.addstr(5,1, "Number of Plys    : ")
-        UI.stdscr.addstr(6,1, "Run/Step          : ")
+        UI.stdscr.addstr(1,1, "Number of Rows              : ")
+        if gameconstants.numRows!= 0:
+            UI.stdscr.addstr(1, 31, gameconstants.numRows)
+        UI.stdscr.addstr(2,1, "Number of Pebbles           : ")
+        if gameconstants.numPebbles != 0:
+            UI.stdscr.addstr(2, 31, gameconstants.numPebbles)
+        UI.stdscr.addstr(3,1, "P1 [human/alpha-beta/andor] : " ,curses.color_pair(UI.TOP_P_COLOR))
+        UI.stdscr.addstr(4,1, "P2 [human/alpha-beta/andor] : " ,curses.color_pair(UI.BOT_P_COLOR))
+        UI.stdscr.addstr(5,1, "Number of Plys              : ")
+        if gameconstants.numPlys != 0:
+            UI.stdscr.addstr(5, 31, gameconstants.numPlys)
+        UI.stdscr.addstr(6,1, "Run/Step                    : ")
+        if gameconstants.stepThrough != None:
+            if gameconstants.stepThrough:
+                UI.stdscr.addstr(6,31, "Step") 
+            else: UI.stdscr.addstr(6,31, "Run") 
+
         
-        UI.stdscr.move(1,21)
+        UI.stdscr.move(1,31)
 	curses.curs_set(1)
         curses.echo()
 
         UI.stdscr.noutrefresh()
         curses.doupdate()
     
-        #get Number of Rows
-
-        gameconstants.numRows = self.numberInput(1,21,2,2,10)
+        #get Number of Rows, if not already set
+        if gameconstants.numRows == 0:
+            gameconstants.numRows = self.numberInput(1,31,2,2,10)
 
         #get Number of Pebbles
-        gameconstants.numPebbles = self.numberInput(2,21,4,0,1000)
+        if gameconstants.numPebbles == 0:
+            gameconstants.numPebbles = self.numberInput(2,31,4,0,1000)
 
         #get P1 human/comp
-        s = self.optionInput(3,21,8,["human", "computer"])
-        if s == "human": gameconstants.p1Human = True
-        else:            gameconstants.p1Human = False
+        s = self.optionInput(3,31,8,["human", "alpha-beta", "andor"])
+        if   s == "human":  gameconstants.p1 = human_player.Human_Player(gameconstants.TOP_PLAYER, self) 
+        elif s == "andor": gameconstants.p1 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
+        elif s == "alpha-beta": gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
+        else: raise RuntimeError("optionInput failed to return a valid value!")           
 
         #get P2 human/comp
-        s = self.optionInput(4,21,8,["human", "computer"])
-        if s == "human": gameconstants.p2Human = True
-        else:            gameconstants.p2Human = False
+        s = self.optionInput(4,31,8,["human", "alpha-beta", "andor"])
+        if   s == "human": gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, self) 
+        elif s == "andor": gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.BOTTOM_PLAYER)
+        elif s == "alpha-beta": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.BOTTOM_PLAYER)
+        else: raise RuntimeError("optionInput failed to return a valid value!")           
 
         #get numPlys
-        numPlys = self.numberInput(5,21,3,1,50)
+        if gameconstants.numPlys == 0:
+            gameconstants.numPlys = self.numberInput(5,31,3,1,50)
         
         #get run/step
-        s = self.optionInput(6,21,5,["run", "step"])
-        if s == "run": gameconstants.stepThrough = True
-        else:          gameconstants.stepThrough = False
+        if gameconstants.stepThrough == None:
+            s = self.optionInput(6,31,5,["run", "step"])
+            if s == "run": gameconstants.stepThrough = True
+            else:          gameconstants.stepThrough = False
 
 
         curses.noecho()

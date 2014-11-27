@@ -10,24 +10,37 @@ import and_or_player
 import sys, getopt
 
 
-askUser = False
+askUser = True
 
 def startProg(screen):
     
     global askUser
 
     ui = UI(screen,askUser);
+
+    if not askUser:
+       gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
+
     b = Board();
     ui.drawState(b)
 
 
-    p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
-    p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
+    if gameconstants.p1 == None:
+        raise RuntimeError("P1 cannot be None!")           
+    if gameconstants.p2 == None:
+        raise RuntimeError("P2 cannot be None!")           
+    #p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
+    #p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
 
     c = '' 
     while c != ord('q'):
         c = UI.stdscr.getch()
-        b = b.move(p1.player, p1.move(b))
+        m = gameconstants.p1.move(b)
+
+        UI.debug(m)
+        c = UI.stdscr.getch()
+
+        b = b.move(gameconstants.p1.player, m)
         ui.drawState(b)
 
 
@@ -36,33 +49,54 @@ def startProg(screen):
     #ui.drawState(b)
     #UI.stdscr.getch()
 
+def usage(): 
+    print "-h [--help]     : Print this message"  
+    print "-d [defaults]   : For debug. Sets user input values to defaults, does not ask for input"
+    print "-p [numplys]    : Specify the number of Plys"
+    print "-r [numrows]    : Specify the number of rows"
+    print "-e [numpebbles] : Specify the number of pebbles"
+    print "-s [step]       : Step through game"
 
 if __name__ == "__main__":
-    global askUser
 
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv,"hd",["help","defaults"])
-    except getopt.GetoptError:
+        opts, args = getopt.getopt(argv,"hdp:r:e:s",["help","defaults","numplys=", "numrows=", "numpebbles=", "step"])
+    except getopt.GetoptError as err:
+        print str(err);
+        usage()
         sys.exit(2)
 
     for opt, arg in opts:
         if opt in ("-h", "--help"):
-            print "-h [--help]    : Print this message"  
-            print "-d [defaults]  : For debug. Sets user input values to defaults"
+            usage()
             sys.exit()
         elif opt in ("-d", "--defaults"):
             gameconstants.numRows = 4 
             gameconstants.numPebbles = 4
-            gameconstants.p1Human = False
-            gameconstants.p2Human = False
+            gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
+            gameconstants.p2 = None 
             gameconstants.numPlys = 4
             gameconstants.stepThrough = False
             askUser = False
+            break
+        elif opt in ("-p", "--numplys"):
+            gameconstants.numPlys = arg
+        elif opt in ("-r", "--numrows"):
+            gameconstants.numRows = arg 
+        elif opt in ("-e", "--numpebbles"):
+            gameconstants.numPebbles = arg
+        elif opt in ("-s", "--step"):
+            gameconstants.stepThrough  = True
 
+  
     try:
         curses.wrapper(startProg)
     except KeyboardInterrupt:
         print "Keyboard Interrupt"
+
+
+
+
 

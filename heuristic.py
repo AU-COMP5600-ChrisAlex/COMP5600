@@ -39,6 +39,8 @@ class Heuristic:
 
             UI.debug("p1Sum: " + str(p1Sum))
             UI.debug("p2Sum: " + str(p2Sum))
+            UI.debug("total: " + str(p1Sum - p2Sum))
+            UI.debug("-----------")
 
 	    return p1Sum - p2Sum
 

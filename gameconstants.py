@@ -7,8 +7,8 @@ DEBUG = True
 
 numRows = 0 
 numPebbles = 0
-p1Human = False
-p2Human = False
+p1 = None
+p2 = None
 numPlys = 0
-stepThrough = False
+stepThrough = None
     
