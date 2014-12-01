@@ -278,6 +278,7 @@ class UI:
         selected = 1
         newsel= 1
         self._selectCell(player,selected)
+        self.refreshBoardWin()
 
         #now, allow arrow keys, [hl], and [0-9] to select new cell. Enter confirms
 
