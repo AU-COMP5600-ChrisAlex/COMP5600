@@ -3,8 +3,8 @@
 import curses
 
 import gameconstants 
-
-
+import and_or_player
+import alpha_beta
 
 
 class UI:
@@ -133,8 +133,8 @@ class UI:
         UI.stdscr.addstr(2,1, "Number of Pebbles           : ")
         if gameconstants.numPebbles != 0:
             UI.stdscr.addstr(2, 31, gameconstants.numPebbles)
-        UI.stdscr.addstr(3,1, "P1 [human/alpha-beta/andor] : " ,curses.color_pair(UI.TOP_P_COLOR))
-        UI.stdscr.addstr(4,1, "P2 [human/alpha-beta/andor] : " ,curses.color_pair(UI.BOT_P_COLOR))
+        UI.stdscr.addstr(3,1, "P1 [human/minmax/andor]     : " ,curses.color_pair(UI.TOP_P_COLOR))
+        UI.stdscr.addstr(4,1, "P2 [human/minmax/andor]     : " ,curses.color_pair(UI.BOT_P_COLOR))
         UI.stdscr.addstr(5,1, "Number of Plys              : ")
         if gameconstants.numPlys != 0:
             UI.stdscr.addstr(5, 31, gameconstants.numPlys)
@@ -161,17 +161,17 @@ class UI:
             gameconstants.numPebbles = self.numberInput(2,31,4,0,1000)
 
         #get P1 human/comp
-        s = self.optionInput(3,31,8,["human", "alpha-beta", "andor"])
+        s = self.optionInput(3,31,8,["human", "minmax", "andor"])
         if   s == "human":  gameconstants.p1 = human_player.Human_Player(gameconstants.TOP_PLAYER, self) 
-        elif s == "andor": gameconstants.p1 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
-        elif s == "alpha-beta": gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
+        elif s == "andor":  gameconstants.p1 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
+        elif s == "minmax": gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
         else: raise RuntimeError("optionInput failed to return a valid value!")           
 
         #get P2 human/comp
-        s = self.optionInput(4,31,8,["human", "alpha-beta", "andor"])
-        if   s == "human": gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, self) 
-        elif s == "andor": gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.BOTTOM_PLAYER)
-        elif s == "alpha-beta": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.BOTTOM_PLAYER)
+        s = self.optionInput(4,31,8,["human", "minmax", "andor"])
+        if   s == "human":  gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, self) 
+        elif s == "andor":  gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.BOTTOM_PLAYER)
+        elif s == "minmax": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.BOTTOM_PLAYER)
         else: raise RuntimeError("optionInput failed to return a valid value!")           
 
         #get numPlys
