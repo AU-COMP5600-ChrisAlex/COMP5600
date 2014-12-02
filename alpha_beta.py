@@ -24,9 +24,6 @@ class Alpha_Beta_Player(Player):
         v = -maxint-1
         a = None
 
-        #TODO: we should instantiate path here, and check 
-        #to see if b in path in the for loop as well
-
         for m, h in self._order_moves(board):
 
             b = board.move(self.player,m)
