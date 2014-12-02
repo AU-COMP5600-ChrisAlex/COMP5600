@@ -19,7 +19,10 @@ def startProg(screen):
     ui = UI(screen,askUser);
 
     if not askUser:
-       gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
+        if gameconstants.p1 == None:
+           gameconstants.p1 = human_player.Human_Player(gameconstants.TOP_PLAYER, ui) 
+        if gameconstants.p2 == None:
+           gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
 
     b = Board();
     ui.drawState(b)
@@ -34,10 +37,12 @@ def startProg(screen):
 
     c = '' 
     while c != ord('q'):
+
         if gameconstants.stepThrough:
           ui.printInstructions("Press any key to continue...")
           c = UI.stdscr.getch()
           ui.clearInstructions()
+
         b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
         ui.drawState(b)
         b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
