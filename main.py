@@ -34,7 +34,10 @@ def startProg(screen):
 
     c = '' 
     while c != ord('q'):
-        c = UI.stdscr.getch()
+        if gameconstants.stepThrough:
+          ui.printInstructions("Press any key to continue...")
+          c = UI.stdscr.getch()
+          ui.clearInstructions()
         b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
         ui.drawState(b)
         b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
