@@ -23,9 +23,13 @@ class Player:
         raise RuntimeError("THIS IS A VIRTUAL METHOD, USE A DERIVED CLASS")
 
     #return if this an AI (true) or a human (false
-    def isComputer(self):
+    @staticmethod
+    def isComputer():
         raise RuntimeError("THIS IS A VIRTUAL METHOD, USE A DERIVED CLASS")
 
+    @staticmethod
+    def optName():
+        raise RuntimeError("THIS IS A VIRTUAL METHOD, USE A DERIVED CLASS")
 
 
 

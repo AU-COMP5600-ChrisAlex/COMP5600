@@ -64,18 +64,18 @@ def pause(s="Press any key to continue..."):
 
 def usage(): 
     print "-h [--help]     : Print this message"  
-    print "-d [defaults]   : For debug. Sets user input values to defaults, does not ask for input"
-    print "-p [numplys]    : Specify the number of Plys"
-    print "-r [numrows]    : Specify the number of rows"
-    print "-e [numpebbles] : Specify the number of pebbles"
-    print "-s [step]       : Step through game"
+    print "-d [--defaults]   : For debug. Sets user input values to defaults, does not ask for input"
+    print "-p [--numplys=]    : Specify the number of Plys.    Argument is [1-50]"
+    print "-r [--numrows=]    : Specify the number of rows.    Argument is [2-10]"
+    print "-e [--numpebbles=] : Specify the number of pebbles. Argument is [0-1000]"
+    print "-s [--step]        : Step through game"
+    print "-t [--p1=]         : Specify player 1 ([t]op player).     Options are: [human, minmax, andor]"
+    print "-b [--p2=]         : Specify player 2 ([b]ottom player).  Options are: [human, minmax, andor]"
 
 if __name__ == "__main__":
 
-    argv = sys.argv[1:]
-
     try:
-        opts, args = getopt.getopt(argv,"hdp:r:e:s",["help","defaults","numplys=", "numrows=", "numpebbles=", "step"])
+        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:st:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step", "p1=","p2="])
     except getopt.GetoptError as err:
         print str(err);
         usage()
@@ -102,6 +102,30 @@ if __name__ == "__main__":
             gameconstants.numPebbles = arg
         elif opt in ("-s", "--step"):
             gameconstants.stepThrough  = True
+        elif opt in ("-t", "--p1"):
+            s = arg.lower()
+            if s in ["human", "minmax", "andor"]:
+                if   s == "human":  gameconstants.p1 = ""
+                elif s == "andor":  gameconstants.p1 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
+                elif s == "minmax": gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
+            else:
+                print "Invalid argument: ", arg, " for option ", opt
+                print "\tValid arguments are: [human, minmax, andor]"
+                sys.exit(2)
+        elif opt in ("-b", "--p2"):
+            s = arg.lower()
+            if s in ["human", "minmax", "andor"]:
+                if   s == "human":  gameconstants.p2 = ""
+                elif s == "andor":  gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
+                elif s == "minmax": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
+            else:
+                print "Invalid argument: ", arg, " for option ", opt
+                print "\tValid arguments are: [human, minmax, andor]"
+                sys.exit(2)
+        else:
+            print "Unrecognized option: ", opt
+            usage()
+            sys.exit()
 
   
     try:

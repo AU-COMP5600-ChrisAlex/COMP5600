@@ -110,4 +110,8 @@ class And_Or_Player(Player):
     def __str__(self):
         return "And-Or Algorithm"
 
-    def isComputer(self): return True
+    @staticmethod
+    def isComputer(): return True
+
+    @staticmethod
+    def optName(): return "andor"
