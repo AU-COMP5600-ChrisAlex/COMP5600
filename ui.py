@@ -64,6 +64,10 @@ class UI:
             if UI.stdscr == None:
                 print s 
             else:
+                y, x = UI.stdscr.getmaxyx()
+                if UI._debugend >= y:
+                    UI._debugend = y
+
                 if UI._debugend < UI._debugstart + UI._debugsize:
                     UI._debugend += 1
                 else:
