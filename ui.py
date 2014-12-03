@@ -15,43 +15,80 @@ class UI:
     BLUE_PAIR    = 1
     RED_PAIR     = 2
     GREEN_PAIR   = 3
+    MAGENTA_PAIR = 4
+    YELLOW_PAIR  = 5
 
     BOARD_P_COLOR = BLUE_PAIR
     TOP_P_COLOR   = RED_PAIR 
     BOT_P_COLOR   = GREEN_PAIR 
-
+    WIN_COLOR     = MAGENTA_PAIR 
+    TURN_COLOR    = YELLOW_PAIR 
 
 
     #define some constants which define where things are placed on the screen
-    _boardbinsize = 4      #how large each bin of the board is
 
-    _boardrow = 3          #row which to print the board
-    _boardcol = 2          #col which to print the board
 
-    _debugstart = 10
     _instructline = 1
     _instructcol = 2
+
+    _turnline = 3
+    _turncol  = 3
+
+    _boardrow = 4          #row which to print the board
+    _boardcol = 2          #col which to print the board
+    _boardbinsize = 4      #how large each bin of the board is
+
+    _usererrorline = 10
+    _debugstart = 11
+
+    _winnerline = 11
+    _winnercol  = 2
+
 
     @staticmethod
     def debug(s):
         if gameconstants.DEBUG:
             if UI.stdscr == None:
-                print s
+                print s 
             else:
                 UI.stdscr.move(UI._debugstart,0)
                 UI.stdscr.insertln()
                 UI.stdscr.insstr(str(s))
  
     @staticmethod
-    def userError(s, line=9):
+    def userError(s, line=-1):
         if UI.stdscr == None:
             print s
         else:
+            if line < 0: line = UI._usererrorline 
             UI.stdscr.move(line,0)
             UI.stdscr.clrtoeol()
             UI.stdscr.insstr(s,curses.color_pair(UI.RED_PAIR))
- 
 
+    @staticmethod
+    def clearUserError(line=-1):
+        if UI.stdscr != None:
+            if line < 0: line = UI._usererrorline 
+            UI.stdscr.move(line,0)
+            UI.stdscr.clrtoeol()
+ 
+    @staticmethod
+    def clearInstructions():
+        if UI.stdscr != None:
+            UI.stdscr.move(UI._instructline,0)
+            UI.stdscr.clrtoeol()
+
+    #prints a line at the top of the screen, telling the user what to do
+    @staticmethod
+    def printInstructions(s):
+        if UI.stdscr == None:
+            print s
+        else:
+            UI.clearInstructions()
+            UI.stdscr.move(UI._instructline, UI._instructcol)
+            UI.stdscr.addstr(s)
+
+           
 
     def __init__(self, screen, askuser=True):
 
@@ -65,9 +102,11 @@ class UI:
 	curses.start_color()
 	curses.use_default_colors()
 
-	curses.init_pair(UI.BLUE_PAIR ,curses.COLOR_BLUE, -1)
-	curses.init_pair(UI.RED_PAIR  ,curses.COLOR_RED, -1)
-	curses.init_pair(UI.GREEN_PAIR,curses.COLOR_GREEN, -1)
+	curses.init_pair(UI.BLUE_PAIR    ,curses.COLOR_BLUE, -1)
+	curses.init_pair(UI.RED_PAIR     ,curses.COLOR_RED, -1)
+	curses.init_pair(UI.GREEN_PAIR   ,curses.COLOR_GREEN, -1)
+	curses.init_pair(UI.MAGENTA_PAIR ,curses.COLOR_MAGENTA, -1)
+	curses.init_pair(UI.YELLOW_PAIR  ,curses.COLOR_YELLOW, -1)
 
         #clear the screen
         UI.stdscr.erase()
@@ -80,16 +119,37 @@ class UI:
 
         if askuser: self.askSetupQuestions()
 
-
-    def clearInstructions(self):
-        UI.stdscr.move(UI._instructline,0)
+    def printTurn(self,player):
+        UI.stdscr.move(UI._turnline ,UI._turncol)
         UI.stdscr.clrtoeol()
 
-    #prints a line at the top of the screen, telling the user what to do
-    def printInstructions(self, str):
-        self.clearInstructions()
-        UI.stdscr.move(UI._instructline, UI._instructcol)
-        UI.stdscr.addstr(str)
+        #Friggin curses inserts at begining of line, regardless
+        
+        UI.stdscr.insstr("(" + str(player) + ")",curses.color_pair(UI.TURN_COLOR))
+        UI.stdscr.insstr(" turn. ",curses.color_pair(UI.TURN_COLOR))
+        if player.player == gameconstants.TOP_PLAYER:
+            UI.stdscr.insstr("Player 1's",curses.color_pair(UI.TOP_P_COLOR))
+        elif player.player == gameconstants.BOTTOM_PLAYER:
+            UI.stdscr.insstr("Player 2's",curses.color_pair(UI.BOT_P_COLOR))
+        else: raise ValueError("Invalid Player")
+        UI.stdscr.insstr("It's ",curses.color_pair(UI.TURN_COLOR))
+
+    def printWinMessage(self, whoWon):
+        UI.stdscr.move(UI._winnerline ,UI._winnercol)
+        UI.stdscr.clrtoeol()
+
+
+        UI.stdscr.insstr(" You Won!!!!",curses.color_pair(UI.WIN_COLOR))
+
+        if whoWon == gameconstants.TOP_PLAYER:
+            UI.stdscr.insstr("Player 1;",curses.color_pair(UI.TOP_P_COLOR))
+        elif whoWon == gameconstants.BOTTOM_PLAYER:
+            UI.stdscr.insstr("Player 2;",curses.color_pair(UI.BOT_P_COLOR))
+        else: raise ValueError("Invalid Player")
+
+        UI.stdscr.insstr("Congratulations, ",curses.color_pair(UI.WIN_COLOR))
+
+        
 
 
     def numberInput(self,row,col,size,min,max):
@@ -101,7 +161,7 @@ class UI:
             UI.stdscr.move(row,col)
             UI.stdscr.clrtoeol()
             s = UI.stdscr.getstr(row,col,size)
-        UI.userError("")
+        UI.clearUserError()
         return int(s)
 
     def optionInput(self,row,col,size,options):
@@ -113,7 +173,7 @@ class UI:
                 if s == opt[:len(s)]:
                     UI.stdscr.addstr(row,col,opt)
                     good = True
-                    UI.userError("");
+                    UI.clearUserError()
                     return opt
 
             err = "You just enter one of: "
@@ -272,7 +332,7 @@ class UI:
             if board != None: self.drawState(board)
             else: raise RuntimeError("No board has been drawn yet!")
 
-        self.printInstructions("Use the arrow keys or press a number to select a cell. Then press Enter to select");
+        UI.printInstructions("Use the arrow keys or press a number to select a cell. Then press Enter to select");
 
         #first, select the player's first cell
         selected = 1
@@ -302,7 +362,7 @@ class UI:
                     continue
                 else:
                     #return current selection
-                    self.clearInstructions()
+                    UI.clearInstructions()
                     return bin
 
             elif c == curses.KEY_LEFT or c == ord('h'):
@@ -314,7 +374,7 @@ class UI:
                 if newsel == 0: newsel = 10
             else: continue
 
-            UI.userError("")
+            UI.clearUserError()
             
             if newsel > gameconstants.numRows: newsel = gameconstants.numRows
             if newsel < 1: newsel = 1

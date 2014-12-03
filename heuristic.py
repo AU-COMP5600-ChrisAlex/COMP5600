@@ -33,6 +33,7 @@ class Heuristic:
 	    p1Sum = 0
 	    p2Sum = 0
 
+            #TODO: REPLACE WITH NUMPY DOT PROUDCT
 	    for i in range(0, gameconstants.numRows):
 		    p1Sum = p1Sum + (p1Bins[i] * Heuristic._constants[i])
 		    p2Sum = p2Sum + (p2Bins[i] * Heuristic._constants[i])

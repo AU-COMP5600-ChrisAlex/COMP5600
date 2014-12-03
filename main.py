@@ -24,34 +24,44 @@ def startProg(screen):
         if gameconstants.p2 == None:
            gameconstants.p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
 
+    if gameconstants.p1 == None: raise RuntimeError("P1 cannot be None!")           
+    if gameconstants.p2 == None: raise RuntimeError("P2 cannot be None!")           
+
+
     b = Board();
     ui.drawState(b)
 
+    while True:
 
-    if gameconstants.p1 == None:
-        raise RuntimeError("P1 cannot be None!")           
-    if gameconstants.p2 == None:
-        raise RuntimeError("P2 cannot be None!")           
-    #p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
-    #p2 = human_player.Human_Player(gameconstants.BOTTOM_PLAYER, ui) 
-
-    c = '' 
-    while c != ord('q'):
-
-        if gameconstants.stepThrough:
-          ui.printInstructions("Press any key to continue...")
-          c = UI.stdscr.getch()
-          ui.clearInstructions()
-
+        #check to see if we should pause before we move
+        ui.printTurn(gameconstants.p1)
+        if gameconstants.stepThrough and gameconstants.p1.isComputer():
+            pause()
         b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
         ui.drawState(b)
+
+        if b.isWon():
+            ui.printWinMessage(b.whoWon)
+            pause()
+            break
+
+        ui.printTurn(gameconstants.p2)
+        if gameconstants.stepThrough and gameconstants.p2.isComputer():
+            pause()
         b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
         ui.drawState(b)
 
-    
-    #b = b.move(gameconstants.TOP_PLAYER, 4)
-    #ui.drawState(b)
-    #UI.stdscr.getch()
+        if b.isWon():
+            ui.printWinMessage(b.whoWon)
+            pause()
+            break
+
+
+def pause(s="Press any key to continue..."):
+    UI.printInstructions(s)
+    c = UI.stdscr.getch()
+    UI.clearInstructions()
+
 
 def usage(): 
     print "-h [--help]     : Print this message"  
@@ -82,7 +92,7 @@ if __name__ == "__main__":
             gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
             gameconstants.p2 = None 
             gameconstants.numPlys = 4
-            gameconstants.stepThrough = False
+            gameconstants.stepThrough = True
             askUser = False
             break
         elif opt in ("-p", "--numplys"):

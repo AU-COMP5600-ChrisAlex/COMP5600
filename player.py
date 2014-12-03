@@ -22,5 +22,10 @@ class Player:
     def __str__(self):
         raise RuntimeError("THIS IS A VIRTUAL METHOD, USE A DERIVED CLASS")
 
+    #return if this an AI (true) or a human (false
+    def isComputer(self):
+        raise RuntimeError("THIS IS A VIRTUAL METHOD, USE A DERIVED CLASS")
+
+
 
 

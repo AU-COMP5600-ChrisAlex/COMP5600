@@ -14,4 +14,6 @@ class Human_Player(Player):
     def __str__(self):
         return "Human Player"
 
+    def isComputer(self):
+        return False
 

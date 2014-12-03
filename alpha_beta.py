@@ -17,6 +17,8 @@ class Alpha_Beta_Player(Player):
 
     def __str__(self):
         return "Alpha-Beta Minimax"
+
+    def isComputer(self): return True
     
     #returns integer representing which bin to move
     def move(self, board):
