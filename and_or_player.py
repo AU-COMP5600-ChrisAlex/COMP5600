@@ -26,7 +26,7 @@ class And_Or_Player(Player):
 
     	# generate all possible board states
     	possBoardStates = []
-    	for i in range(0, len(possMoves)):
+    	for i in possMoves:
     		possBoardStates.append(board.move(self.player, (i+1)))
 
     	# check to see if end
@@ -36,8 +36,8 @@ class And_Or_Player(Player):
     		# will play as well as possible
     		# get heuristic values
 	    	hVals = []
-	    	for i in range(0, len(possBoardStates)):
-	    		hVals.append(Heuristic.getValue(possBoardStates[i], self.player))
+	    	for i in possBoardStates:
+	    		hVals.append(Heuristic.getValue(i, self.player))
 
 	    	# determine the worst (for the AI player)
 	    	worst = hVals[0];
@@ -81,13 +81,13 @@ class And_Or_Player(Player):
 
     	# generate all possible board states
     	possBoardStates = []
-    	for i in range(0, len(possMoves)):
+    	for i in possMoves:
     		possBoardStates.append(board.move(self.player, (i+1)))
 
     	# get heuristic values
     	hVals = []
-    	for i in range(0, len(possBoardStates)):
-    		hVals.append(Heuristic.getValue(possBoardStates[i], self.player))
+    	for i in possBoardStates:
+    		hVals.append(Heuristic.getValue(i, self.player))
 
     	# determine the best
     	best = hVals[0];
