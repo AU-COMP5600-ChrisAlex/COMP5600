@@ -2,6 +2,7 @@
 
 from player import Player
 from heuristic import Heuristic
+import gameconstants
 
 class And_Or_Player(Player):
 
@@ -19,14 +20,14 @@ class And_Or_Player(Player):
     	# find the possible moves
     	possMoves = []
     	for i in range(0, board.getCols()):
-    		curBin = board.getBin(self, (i+1))
+    		curBin = board.getBin(self.player, (i+1))
     		if curBin != 0:
     			possMoves.append(i)
 
     	# generate all possible board states
     	possBoardStates = []
     	for i in range(0, len(possMoves)):
-    		possBoardStates.append(board.move(self, (i+1)))
+    		possBoardStates.append(board.move(self.player, (i+1)))
 
     	# check to see if end
     	if depth == gameconstants.numPlys:
@@ -36,7 +37,7 @@ class And_Or_Player(Player):
     		# get heuristic values
 	    	hVals = []
 	    	for i in range(0, len(possBoardStates)):
-	    		hVals.append(Heuristic.getValue(possBoardStates[i], self))
+	    		hVals.append(Heuristic.getValue(possBoardStates[i], self.player))
 
 	    	# determine the worst (for the AI player)
 	    	worst = hVals[0];
@@ -74,19 +75,19 @@ class And_Or_Player(Player):
     	# find the possible moves
     	possMoves = []
     	for i in range(0, board.getCols()):
-    		curBin = board.getBin(self, (i+1))
+    		curBin = board.getBin(self.player, (i+1))
     		if curBin != 0:
     			possMoves.append(i)
 
     	# generate all possible board states
     	possBoardStates = []
     	for i in range(0, len(possMoves)):
-    		possBoardStates.append(board.move(self, (i+1)))
+    		possBoardStates.append(board.move(self.player, (i+1)))
 
     	# get heuristic values
     	hVals = []
     	for i in range(0, len(possBoardStates)):
-    		hVals.append(Heuristic.getValue(possBoardStates[i], self))
+    		hVals.append(Heuristic.getValue(possBoardStates[i], self.player))
 
     	# determine the best
     	best = hVals[0];
