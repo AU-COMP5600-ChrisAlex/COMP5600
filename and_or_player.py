@@ -54,7 +54,7 @@ class And_Or_Player(Player):
     		# get the responses
     		responses = []
     		for i in range(0, len(possMoves)):
-    			responses.append(orMove(board, depth))
+    			responses.append(self.orMove(board, depth))
 
     		# find the worst
     		worst = responses[0][1]
@@ -102,7 +102,7 @@ class And_Or_Player(Player):
     		return (bestMove, hVals[bestMoveIndex])
     	else:
     		depth = depth + 1
-    		return orMove(possBoardStates[bestMoveIndex], depth)
+    		return self.andMove(possBoardStates[bestMoveIndex], depth)
 
     def __str__(self):
         return "And-Or Algorithm"
