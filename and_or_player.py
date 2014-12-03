@@ -3,6 +3,7 @@
 from player import Player
 from heuristic import Heuristic
 import gameconstants
+import ui
 
 class And_Or_Player(Player):
 
@@ -12,6 +13,7 @@ class And_Or_Player(Player):
 
     def move(self, board):
         bestMove = self.orMove(board, 1)
+        ui.UI.debug("chose : " + str(bestMove))
         return bestMove[0]
 
     # And is for the oppenent
