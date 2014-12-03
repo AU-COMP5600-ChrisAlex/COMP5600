@@ -10,7 +10,7 @@ class And_Or_Player(Player):
 
 
     def move(self, board):
-        bestMove = orMove(board, 1)
+        bestMove = self.orMove(board, 1)
         return bestMove[0]
 
     # And is for the oppenent
