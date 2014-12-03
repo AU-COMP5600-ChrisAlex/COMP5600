@@ -27,7 +27,6 @@ def startProg(screen):
     if gameconstants.p1 == None: raise RuntimeError("P1 cannot be None!")           
     if gameconstants.p2 == None: raise RuntimeError("P2 cannot be None!")           
 
-
     b = Board();
     ui.drawState(b)
 

@@ -6,6 +6,8 @@ import gameconstants
 import and_or_player
 import alpha_beta
 import human_player
+import os
+from time import gmtime, strftime
 
 
 class UI:
@@ -52,8 +54,11 @@ class UI:
         if gameconstants.DEBUG:
             if UI.debugFile == None:
                 UI.debugFile = open("dbgout", "a");
-                UI.debugFile.write("\n\n\n\n\n------------------------------------------------------\n\n\n\n\n")
-            UI.debugFile.write(s);
+                UI.debugFile.write("\n\n\n\n\n------------------------------------------------------\n")
+                UI.debugFile.write(str(strftime("%a, %d %b %Y %X \n",gmtime())))
+            UI.debugFile.write(s + "\n")
+            UI.debugFile.flush()
+            os.fsync(UI.debugFile.fileno())
             if UI.stdscr == None:
                 print s 
             else:
