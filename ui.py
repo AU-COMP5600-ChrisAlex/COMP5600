@@ -46,9 +46,14 @@ class UI:
     _winnercol  = 2
 
 
+    debugFile = None
     @staticmethod
     def debug(s):
         if gameconstants.DEBUG:
+            if UI.debugFile == None:
+                UI.debugFile = open("dbgout", "a");
+                UI.debugFile.write("\n\n\n\n\n------------------------------------------------------\n\n\n\n\n")
+            UI.debugFile.write(s);
             if UI.stdscr == None:
                 print s 
             else:
@@ -388,6 +393,8 @@ class UI:
                 
                 
     def __del__(self): #note: del is not gaurenteed to be called
+        if UI.debugFile != None:
+            UI.debugFile.close()
         curses.endwin()
 
 
