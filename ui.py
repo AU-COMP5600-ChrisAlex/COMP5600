@@ -5,6 +5,7 @@ import curses
 import gameconstants 
 import and_or_player
 import alpha_beta
+import human_player
 
 
 class UI:
