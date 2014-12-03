@@ -289,14 +289,22 @@ class UI:
 
             #(windows compatible newline?)
             if c == ord('\n') or c == ord('\r'):
+
                 #check to see if that is a valid selection (ie, non-zero value)
-                if board.getBin(player,selected) == 0:
+                if player == gameconstants.BOTTOM_PLAYER:
+                    bin = board.getCols() - selected + 1
+                else: bin = selected
+
+                 
+                if board.getBin(player,bin) == 0:
                     #invalid bin!
                     UI.userError("Illegal move!")
+                    continue
                 else:
                     #return current selection
                     self.clearInstructions()
-                    return selected
+                    return bin
+
             elif c == curses.KEY_LEFT or c == ord('h'):
                 newsel = selected - 1
             elif c == curses.KEY_RIGHT or c == ord('l'): 
