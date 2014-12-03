@@ -43,6 +43,8 @@ class UI:
 
     _usererrorline = 10
     _debugstart = 11
+    _debugsize = 15
+    _debugend = _debugstart - 1
 
     _winnerline = 11
     _winnercol  = 2
@@ -62,8 +64,12 @@ class UI:
             if UI.stdscr == None:
                 print s 
             else:
-                UI.stdscr.move(UI._debugstart,0)
-                UI.stdscr.insertln()
+                if UI._debugend < UI._debugstart + UI._debugsize:
+                    UI._debugend += 1
+                else:
+                    UI.stdscr.move(UI._debugstart,0)
+                    UI.stdscr.deleteln()
+                UI.stdscr.move(UI._debugend,0)
                 UI.stdscr.insstr(str(s))
  
     @staticmethod

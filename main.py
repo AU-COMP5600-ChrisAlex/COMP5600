@@ -27,6 +27,14 @@ def startProg(screen):
     if gameconstants.p1 == None: raise RuntimeError("P1 cannot be None!")           
     if gameconstants.p2 == None: raise RuntimeError("P2 cannot be None!")           
 
+    UI.debug("Game paramaters:")
+    UI.debug("\tRows:    " + str(gameconstants.numRows))
+    UI.debug("\tPebbles: " + str(gameconstants.numPebbles))
+    UI.debug("\tp1:      " + str(gameconstants.p1))
+    UI.debug("\tp2:      " + str(gameconstants.p2))
+    UI.debug("\tPlys:    " + str(gameconstants.numPlys))
+    UI.debug("\tStep:    " + str(gameconstants.stepThrough))
+
     b = Board();
     ui.drawState(b)
 
@@ -93,6 +101,7 @@ if __name__ == "__main__":
             gameconstants.numPlys = 4
             gameconstants.stepThrough = True
             askUser = False
+            UI.debug("Using default game paramaters:")
             break
         elif opt in ("-p", "--numplys"):
             gameconstants.numPlys = arg
