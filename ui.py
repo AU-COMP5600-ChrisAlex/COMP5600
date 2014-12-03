@@ -284,12 +284,19 @@ class UI:
 
         done = False
         while not done:
+
             c = UI.stdscr.getch()
 
+            #(windows compatible newline?)
             if c == ord('\n') or c == ord('\r'):
-                #return current selection (windows compatable?)
-                self.clearInstructions()
-                return selected
+                #check to see if that is a valid selection (ie, non-zero value)
+                if board.getBin(player,selected) == 0:
+                    #invalid bin!
+                    UI.userError("Illegal move!")
+                else:
+                    #return current selection
+                    self.clearInstructions()
+                    return selected
             elif c == curses.KEY_LEFT or c == ord('h'):
                 newsel = selected - 1
             elif c == curses.KEY_RIGHT or c == ord('l'): 
@@ -297,7 +304,9 @@ class UI:
             elif c >= ord('0') and c <= ord('9'):
                 newsel = c - ord('0')
                 if newsel == 0: newsel = 10
-            else: continue #do nothing, bad key
+            else: continue
+
+            UI.userError("")
             
             if newsel > gameconstants.numRows: newsel = gameconstants.numRows
             if newsel < 1: newsel = 1

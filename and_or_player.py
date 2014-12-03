@@ -10,3 +10,6 @@ class And_Or_Player(Player):
 
     def move(self, board):
         raise NotImplementedError("And-Or player not implemented")
+
+    def __str__(self):
+        return "And-Or Algorithm"

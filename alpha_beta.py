@@ -15,6 +15,8 @@ class Alpha_Beta_Player(Player):
         Player.__init__(self, player_num=player)
         #super(Alpha_Beta_Player, self).__init__(player_num=num)
 
+    def __str__(self):
+        return "Alpha-Beta Minimax"
     
     #returns integer representing which bin to move
     def move(self, board):

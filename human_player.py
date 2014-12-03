@@ -11,5 +11,7 @@ class Human_Player(Player):
     def move(self, board):
         return self.ui.interact(self.player)
 
+    def __str__(self):
+        return "Human Player"
 
 
