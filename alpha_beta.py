@@ -21,7 +21,7 @@ class Alpha_Beta_Player(Player):
     def optName(): return "minmax"
 
     @staticmethod
-    def isComputer(self): return True
+    def isComputer(): return True
     
     #returns integer representing which bin to move
     def move(self, board):
@@ -68,7 +68,10 @@ class Alpha_Beta_Player(Player):
 
             if isMax:
                     for i in range(1, boardState.cols+1):
-                            childBoardState = boardState.move(gameconstants.TOP_PLAYER, i)
+                            try:
+                                childBoardState = boardState.move(gameconstants.TOP_PLAYER, i)
+                            except RuntimeError: continue #catch invalid moves
+
                             if not path.pathContains(childBoardState):
                                     node.setNext(childBoardState)
                                     alpha = max(alpha, self._alpha_beta(path, depth - 1, False, alpha, beta))
@@ -77,7 +80,10 @@ class Alpha_Beta_Player(Player):
                     return alpha
             else:	# isMin
                     for i in range(1, boardState.cols+1):
-                            childBoardState = boardState.move(gameconstants.BOTTOM_PLAYER, i)
+                            try:
+                                childBoardState = boardState.move(gameconstants.BOTTOM_PLAYER, i)
+                            except RuntimeError: continue #catch invalid moves
+
                             if not path.pathContains(childBoardState):
                                     node.setNext(childBoardState)
                                     beta = min(beta, self._alpha_beta(path, depth - 1, True, alpha, beta))
