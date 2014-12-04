@@ -97,7 +97,7 @@ class And_Or_Player(Player):
     	for i in range(1, len(hVals)):
     		if hVals[i] > best:
     			best = hVals[i]
-    			betsMoveIndex = i
+    			bestMoveIndex = i
 
     	# check if the end
     	if depth == gameconstants.numPlys:

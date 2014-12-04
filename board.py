@@ -44,7 +44,9 @@ class Board:
         bin = bin -1; #array is 0-index, but paramater is not
 
         if bin < 0 or bin >= self.cols:
-            raise IndexError("Invalid Bin: " + str(bin) + " With board state:\n" + str(self))
+            if player == gameconstants.TOP_PLAYER: s = "P1"
+            else: s="p2"
+            raise IndexError(s + ": Invalid Bin: " + str(bin) + "\n" + str(self))
 
         if self.getBin(player,bin+1) == 0:
             raise RuntimeError("Illegal Move - Bin contains 0 pebbles")
@@ -86,7 +88,9 @@ class Board:
     #bin is indexed from [1,self.cols]
     def getBin(self,player,bin):
         if bin-1 < 0 or bin > self.cols:
-            raise IndexError("Invalid Bin: " + str(bin) + " With board state:\n" + str(self))
+            if player == gameconstants.TOP_PLAYER: s = "P1"
+            else: s="p2"
+            raise IndexError(s + ": Invalid Bin: " + str(bin) + "\n" + str(self))
 
         if player == gameconstants.TOP_PLAYER:
             return self.p1[bin-1]
