@@ -54,25 +54,40 @@ class UI:
     @staticmethod
     def debug(s):
         if gameconstants.DEBUG:
-            if UI.debugFile == None:
-                UI.debugFile = open("dbgout", "a");
-                UI.debugFile.write("\n\n\n\n\n------------------------------------------------------\n")
-                UI.debugFile.write(str(strftime("%a, %d %b %Y %X \n",gmtime())))
-            UI.debugFile.write(s + "\n")
-            UI.debugFile.flush()
-            os.fsync(UI.debugFile.fileno())
+            try:
+                if UI.debugFile == None:
+                    UI.debugFile = open("dbgout", "a");
+                    UI.debugFile.write("\n\n\n\n\n------------------------------------------------------\n")
+                    UI.debugFile.write(str(strftime("%a, %d %b %Y %X \n",gmtime())))
+                UI.debugFile.write(s + "\n")
+                UI.debugFile.flush()
+                os.fsync(UI.debugFile.fileno())
+            except IOError: pass #could not open file for debugging!
+
+
             if UI.stdscr == None:
                 print s 
             else:
                 y, x = UI.stdscr.getmaxyx()
-                if UI._debugend >= y:
-                    UI._debugend = y
 
+                if UI._debugstart >= y:
+                    UI.printUIError("Terminal Window too small for debug output!")
+                    return
+                else: clearUIError()
+
+                moveup = False
                 if UI._debugend < UI._debugstart + UI._debugsize:
                     UI._debugend += 1
-                else:
+                else: moveup = True
+
+                if UI._debugend > y-1:
+                    UI._debugend = y-1
+                    moveup = True
+
+                if moveup:
                     UI.stdscr.move(UI._debugstart,0)
                     UI.stdscr.deleteln()
+
                 UI.stdscr.move(UI._debugend,0)
                 UI.stdscr.insstr(str(s))
  
@@ -82,6 +97,8 @@ class UI:
             print s
         else:
             if line < 0: line = UI._usererrorline 
+            y, x = UI.stdscr.getmaxyx()
+            if line >= y: line = 0
             UI.stdscr.move(line,0)
             UI.stdscr.clrtoeol()
             UI.stdscr.insstr(s,curses.color_pair(UI.RED_PAIR))
@@ -90,6 +107,8 @@ class UI:
     def clearUserError(line=-1):
         if UI.stdscr != None:
             if line < 0: line = UI._usererrorline 
+            y, x = UI.stdscr.getmaxyx()
+            if line >= y: line = 0
             UI.stdscr.move(line,0)
             UI.stdscr.clrtoeol()
  
@@ -109,16 +128,27 @@ class UI:
             UI.stdscr.move(UI._instructline, UI._instructcol)
             UI.stdscr.addstr(s)
 
+    @staticmethod
+    def clearUIError():
+        if UI.stdscr != None:
+            UI.stdscr.move(0,0)
+            UI.stdscr.clrtoeol()
            
+    @staticmethod
+    def printUIError(s):
+        if UI.stdscr != None:
+            UI.clearUIError()
+            UI.stdscr.insstr(s,curses.color_pair(UI.RED_PAIR))
 
     def __init__(self, screen, askuser=True):
 
         if UI.stdscr == None:
             UI.stdscr = screen
+
         else:
             raise RuntimeError("UI is already initalized!")
 
-
+        
         curses.noecho()
 	curses.start_color()
 	curses.use_default_colors()
@@ -131,12 +161,17 @@ class UI:
 
         #clear the screen
         UI.stdscr.erase()
-
-	curses.curs_set(0)
-        UI.stdscr.move(UI._debugstart,0)
+        curses.curs_set(0)
         UI.stdscr.leaveok(0)
 
         self.boardWin = None
+
+        y, x = UI.stdscr.getmaxyx()
+        if y <= 6:
+            UI.printUIError("Terminal Window too small! Please resize and restart Program.")
+            UI.stdscr.getch()
+            raise RuntimeError("Terminal too small")
+
 
         if askuser: self.askSetupQuestions()
 
@@ -207,6 +242,12 @@ class UI:
     def askSetupQuestions(self):
 
         UI.stdscr.erase()
+
+        y, x = UI.stdscr.getmaxyx()
+        if y <= 6:
+            UI.printUIError("Terminal Window too small! Please resize and restart Program.")
+            UI.stdscr.getch()
+            raise KeyboardInterrupt
 
         UI.stdscr.addstr(1,1, "Number of Rows              : ")
         if gameconstants.numRows!= 0:
@@ -279,7 +320,6 @@ class UI:
         UI.stdscr.erase()
 
 	curses.curs_set(0)
-        UI.stdscr.move(UI._debugstart,0)
         UI.stdscr.leaveok(0)
 
     def refreshBoardWin(self):
