@@ -209,6 +209,19 @@ if __name__ == "__main__":
             usage()
             sys.exit()
 
+
+    if gameconstants.ghost:
+        #make sure everything is specified
+        if (gameconstants.numPlys == 0 or
+            gameconstants.numRows == 0 or
+            gameconstants.numPebbles == 0 or
+            gameconstants.p1 == None or
+            gameconstants.p2 == None or
+            gameconstants.stepThrough != False):
+          print "ERROR: when using ghost mode, you must specify all game paramaters, and be in 'go' mode!"
+          sys.exit(2)
+
+
   
     try:
         if not gameconstants.ghost:

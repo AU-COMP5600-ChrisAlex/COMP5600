@@ -4,7 +4,7 @@
 #script to run the program alot to gather runtime statistics
 
 
-#format: ./main.py -p [depth] -r [rows] -e [pebbles] -t [top_alg] -b [bot_alg] -g
+#format: ./main.py -p [depth] -r [rows] -e [pebbles] -t [top_alg] -b [bot_alg] -g --ghost
 
 
 
