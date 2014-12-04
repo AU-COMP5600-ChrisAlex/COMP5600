@@ -75,33 +75,37 @@ def startProg(screen):
             break
 
 
-    #output some statistics
-    statFile = open(gameconstants.statsFile, "a")
-    if os.stat(gameconstants.statsFile)[stat.ST_SIZE]==0:
-        #print the header
-        statFile.write("Rows,Pebbles,P1,P2,Depth,Runtime,CPU time,plycount,winner\n");
-
-    #print the statistics
-    statFile.write(str(gameconstants.numRows) + ",")          #rows
-    statFile.write(str(gameconstants.numPebbles) + ",")       #pebbles
-    statFile.write(str(gameconstants.p1.optName()) + ",")     #p1
-    statFile.write(str(gameconstants.p2.optName()) + ",")     #p2
-    statFile.write(str(gameconstants.numPlys) + ",")          #depth
-    statFile.write(str(endtime-starttime) + ",")              #runtime
-    statFile.write(str(endcputime-startcputime) + ",")        #CPU time
-    statFile.write(str(plyCount)+ ",")                        #plycount
-    if b.whoWon() == gameconstants.TOP_PLAYER:                #winner
-        statFile.write(str(gameconstants.p1.optName()) + ",")
-    elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
-        statFile.write(str(gameconstants.p2.optName()) + ",")
-    else:
-        statFile.write("?" + ",")
-
-    statFile.write("\n")
-    statFile.flush()
-    statFile.close()
-    
     curses.endwin()
+    try:
+        #output some statistics
+        statFile = open(gameconstants.statsFile, "a")
+        if os.stat(gameconstants.statsFile)[stat.ST_SIZE]==0:
+            #print the header
+            statFile.write("Rows,Pebbles,P1,P2,Depth,Runtime,CPU time,plycount,winner\n");
+
+        #print the statistics
+        statFile.write(str(gameconstants.numRows) + ",")          #rows
+        statFile.write(str(gameconstants.numPebbles) + ",")       #pebbles
+        statFile.write(str(gameconstants.p1.optName()) + ",")     #p1
+        statFile.write(str(gameconstants.p2.optName()) + ",")     #p2
+        statFile.write(str(gameconstants.numPlys) + ",")          #depth
+        statFile.write(str(endtime-starttime) + ",")              #runtime
+        statFile.write(str(endcputime-startcputime) + ",")        #CPU time
+        statFile.write(str(plyCount)+ ",")                        #plycount
+        if b.whoWon() == gameconstants.TOP_PLAYER:                #winner
+            statFile.write(str(gameconstants.p1.optName()) + ",")
+        elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
+            statFile.write(str(gameconstants.p2.optName()) + ",")
+        else:
+            statFile.write("?" + ",")
+
+        statFile.write("\n")
+        statFile.flush()
+        statFile.close()
+    except Exception as e:
+        print "Problem writing stats file!"
+        print e
+
 
     print "------------------------------------"
     print "END OF GAME STATISTICS:"
@@ -123,7 +127,7 @@ def startProg(screen):
     print "------------------------------------"
 
 
-def pause(s="Press agameconstants.numPlys) + ny key to continue..."):
+def pause(s="Press any key to continue..."):
     UI.printInstructions(s)
     c = UI.stdscr.getch()
     UI.clearInstructions()
