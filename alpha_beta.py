@@ -21,7 +21,7 @@ class Alpha_Beta_Player(Player):
     def optName(): return "minmax"
 
     @staticmethod
-    def isComputer(self): return True
+    def isComputer(): return True
     
     #returns integer representing which bin to move
     def move(self, board):
