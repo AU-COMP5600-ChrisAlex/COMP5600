@@ -91,9 +91,9 @@ def startProg(screen):
     statFile.write(str(endcputime-startcputime) + ",")        #CPU time
     statFile.write(str(plyCount)+ ",")                        #plycount
     if b.whoWon() == gameconstants.TOP_PLAYER:                #winner
-        statFile.write(str(gameconstants.p1) + ",")
+        statFile.write(str(gameconstants.p1.optName()) + ",")
     elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
-        statFile.write(str(gameconstants.p2) + ",")
+        statFile.write(str(gameconstants.p2.optName()) + ",")
     else:
         statFile.write("?" + ",")
 
@@ -115,9 +115,9 @@ def startProg(screen):
     print "plycount: ", plyCount
 
     if b.whoWon() == gameconstants.TOP_PLAYER: 
-        print "winner  : ", str(gameconstants.p1)
+        print "winner  : ", str(gameconstants.p1.optName())
     elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
-        print "winner  : ", str(gameconstants.p2)
+        print "winner  : ", str(gameconstants.p2.optName())
     else:
         print "winner  : ?"
     print "------------------------------------"
