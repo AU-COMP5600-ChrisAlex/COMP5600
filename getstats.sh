@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 
 #script to run the program alot to gather runtime statistics
@@ -14,6 +14,8 @@
 #runs with players in both positions
 
 #makeRun [depth] [rows] [pebbles] [top_player] [bottom_player]
+
+trap "pkill -f makeRun; pkill -f main.py; exit" SIGHUP SIGINT SIGTERM
 
 makeRun() {
    for i in $(seq 1 10); do
