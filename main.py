@@ -83,7 +83,7 @@ def usage():
 if __name__ == "__main__":
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:st:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step", "p1=","p2="])
+        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:sgt:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step","run","p1=","p2="])
     except getopt.GetoptError as err:
         print str(err);
         usage()
@@ -110,7 +110,17 @@ if __name__ == "__main__":
         elif opt in ("-e", "--numpebbles"):
             gameconstants.numPebbles = arg
         elif opt in ("-s", "--step"):
-            gameconstants.stepThrough  = True
+            if gameconstants.stepThrough == None:
+                gameconstants.stepThrough  = True
+            else:
+                print "You cannot specify both --run (-g) and --step (-s)!"
+                sys.exit(2)
+        elif opt in ("-g", "--run"):
+            if gameconstants.stepThrough == None:
+                gameconstants.stepThrough  = False
+            else:
+                print "You cannot specify both --run (-g) and --step (-s)!"
+                sys.exit(2)
         elif opt in ("-t", "--p1"):
             s = arg.lower()
             if s in ["human", "minmax", "andor"]:

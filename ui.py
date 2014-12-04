@@ -190,6 +190,9 @@ class UI:
         else: raise ValueError("Invalid Player")
         UI.stdscr.insstr("It's ",curses.color_pair(UI.TURN_COLOR))
 
+        UI.stdscr.noutrefresh()
+        curses.doupdate()
+
     def printWinMessage(self, whoWon):
         UI.stdscr.move(UI._winnerline ,0)
         UI.stdscr.clrtoeol()
@@ -321,6 +324,8 @@ class UI:
 
 	curses.curs_set(0)
         UI.stdscr.leaveok(0)
+
+        UI.stdscr.refresh()
 
     def refreshBoardWin(self):
         self.boardWin.noutrefresh()
