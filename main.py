@@ -19,7 +19,7 @@ def startProg(screen):
     global askUser
 
     if not gameconstants.ghost:
-        ui = UI(screen,askUser);
+        ui = UI(screen,askUser)
 
     if not askUser:
         if gameconstants.p1 == None:
@@ -198,8 +198,8 @@ if __name__ == "__main__":
             s = arg.lower()
             if s in ["human", "minmax", "andor"]:
                 if   s == "human":  gameconstants.p2 = ""
-                elif s == "andor":  gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER)
-                elif s == "minmax": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER)
+                elif s == "andor":  gameconstants.p2 = and_or_player.And_Or_Player(gameconstants.BOTTOM_PLAYER)
+                elif s == "minmax": gameconstants.p2 = alpha_beta.Alpha_Beta_Player(gameconstants.BOTTOM_PLAYER)
             else:
                 print "Invalid argument: ", arg, " for option ", opt
                 print "\tValid arguments are: [human, minmax, andor]"
