@@ -51,8 +51,11 @@ class And_Or_Player(Player):
     		depth = depth + 1
     		# get the hVals
                 for b in possBoardStates:
-                        m,h=self.orMove(b, depth)
-                        hVals.append(h)
+                        if b.isWon():
+                            hVals.append(Heuristic.getValue(b, self.player))
+                        else:
+                            m,h=self.orMove(b, depth)
+                            hVals.append(h)
 
         # determine the worst (for the AI player)
         worst = hVals[0];
@@ -73,7 +76,10 @@ class And_Or_Player(Player):
     		if curBin != 0:
     			possMoves.append(i)
 
-    	ui.UI.debug("possible moves : " + str(possMoves))
+        # if no possible moves return
+        if (len(possMoves) == 0):
+            return None
+    	#ui.UI.debug("possible moves : " + str(possMoves))
 
     	# generate all possible board states
     	possBoardStates = []
@@ -89,16 +95,17 @@ class And_Or_Player(Player):
    	else:
             depth = depth + 1
             for b in possBoardStates:
-                hVals.append(self.andMove(b, depth))
+                if (b.isWon()):
+                    hVals.append(Heuristic.getValue(b, self.player))
+                else:
+                    hVals.append(self.andMove(b, depth))
 
-        # determine the best
-        if (len(hVals) > 0):
-            best = hVals[0]
-            bestMoveIndex = 0
-            for i in range(1, len(hVals)):
-                    if hVals[i] > best:
-                            best = hVals[i]
-                            bestMoveIndex = i
+        best = hVals[0]
+        bestMoveIndex = 0
+        for i in range(1, len(hVals)):
+                if hVals[i] > best:
+                        best = hVals[i]
+                        bestMoveIndex = i
 
         bestMove = possMoves[bestMoveIndex]
         return (bestMove, hVals[bestMoveIndex])
