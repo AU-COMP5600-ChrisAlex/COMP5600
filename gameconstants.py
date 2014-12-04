@@ -12,3 +12,5 @@ p2 = None
 numPlys = 0
 stepThrough = None
     
+
+statsFile = "stats.csv"

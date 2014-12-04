@@ -60,4 +60,5 @@ target/
 
 #debug files
 dbgout
+stats.csv
 

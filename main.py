@@ -8,6 +8,7 @@ import alpha_beta
 import human_player
 import and_or_player
 import sys, getopt
+import os, stat
 
 
 askUser = True
@@ -38,13 +39,15 @@ def startProg(screen):
     b = Board();
     ui.drawState(b)
 
-    while True:
 
+    plyCount = 0
+    while True:
         #check to see if we should pause before we move
         ui.printTurn(gameconstants.p1)
         if gameconstants.stepThrough and gameconstants.p1.isComputer():
             pause()
         b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
+        plyCount = plyCount + 1
         ui.drawState(b)
 
         if b.isWon():
@@ -56,12 +59,35 @@ def startProg(screen):
         if gameconstants.stepThrough and gameconstants.p2.isComputer():
             pause()
         b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
+        plyCount = plyCount + 1
         ui.drawState(b)
 
         if b.isWon():
             ui.printWinMessage(b.whoWon())
             pause()
             break
+
+
+    #output some statistics
+    statFile = open(gameconstants.statsFile, "a")
+    if os.stat(gameconstants.statsFile)[stat.ST_SIZE]==0:
+        #print the header
+        statFile.write("Rows,Pebbles,P1,P2,Depth,Runtime,plycount\n");
+
+    #print the statistics
+    statFile.write(str(gameconstants.numRows))
+    statFile.write(str(gameconstants.numPebbles))
+    statFile.write(str(gameconstants.p1))
+    statFile.write(str(gameconstants.p2))
+    statFile.write(str(gameconstants.numPlys))
+    statFile.write(str(gameconstants.stepThrough))
+    statFile.write(str("RUNTIME HERE"))
+    statFile.write(str(plyCount))
+
+
+    statFile.flush()
+    statFile.close()
+
 
 
 def pause(s="Press any key to continue..."):
