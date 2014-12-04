@@ -84,8 +84,8 @@ def startProg(screen):
     #print the statistics
     statFile.write(str(gameconstants.numRows) + ",")          #rows
     statFile.write(str(gameconstants.numPebbles) + ",")       #pebbles
-    statFile.write(str(gameconstants.p1) + ",")               #p1
-    statFile.write(str(gameconstants.p2) + ",")               #p2
+    statFile.write(str(gameconstants.p1.optName()) + ",")     #p1
+    statFile.write(str(gameconstants.p2.optName()) + ",")     #p2
     statFile.write(str(gameconstants.numPlys) + ",")          #depth
     statFile.write(str(endtime-starttime) + ",")              #runtime
     statFile.write(str(endcputime-startcputime) + ",")        #CPU time
@@ -100,10 +100,30 @@ def startProg(screen):
     statFile.write("\n")
     statFile.flush()
     statFile.close()
+    
+    curses.endwin()
+
+    print "------------------------------------"
+    print "END OF GAME STATISTICS:"
+    print "Rows    : ", gameconstants.numRows
+    print "Pebbles : ", gameconstants.numPebbles
+    print "P1      : ", gameconstants.p1.optName()
+    print "P2      : ", gameconstants.p2.optName()
+    print "Depth   : ", gameconstants.numPlys
+    print "Runtime : ", str(endtime-starttime)
+    print "CPUtime : ", str(endcputime-startcputime)
+    print "plycount: ", plyCount
+
+    if b.whoWon() == gameconstants.TOP_PLAYER: 
+        print "winner  : ", str(gameconstants.p1)
+    elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
+        print "winner  : ", str(gameconstants.p2)
+    else:
+        print "winner  : ?"
+    print "------------------------------------"
 
 
-
-def pause(s="Press any key to continue..."):
+def pause(s="Press agameconstants.numPlys) + ny key to continue..."):
     UI.printInstructions(s)
     c = UI.stdscr.getch()
     UI.clearInstructions()
