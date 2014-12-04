@@ -128,9 +128,10 @@ def startProg(screen):
 
 
 def pause(s="Press any key to continue..."):
-    UI.printInstructions(s)
-    c = UI.stdscr.getch()
-    UI.clearInstructions()
+    if not gameconstants.ghost:
+        UI.printInstructions(s)
+        c = UI.stdscr.getch()
+        UI.clearInstructions()
 
 
 def usage(): 
@@ -146,7 +147,7 @@ def usage():
 if __name__ == "__main__":
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:sgt:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step","run","p1=","p2="])
+        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:sgt:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step","run","p1=","p2=","ghost"])
     except getopt.GetoptError as err:
         print str(err);
         usage()
@@ -204,6 +205,8 @@ if __name__ == "__main__":
                 print "Invalid argument: ", arg, " for option ", opt
                 print "\tValid arguments are: [human, minmax, andor]"
                 sys.exit(2)
+        if opt in ("--ghost"):
+            gameconstants.ghost= True
         else:
             print "Unrecognized option: ", opt
             usage()

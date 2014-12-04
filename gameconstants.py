@@ -5,6 +5,8 @@ BOTTOM_PLAYER = 1
 
 DEBUG = False
 
+ghost = False
+
 numRows = 0 
 numPebbles = 0
 p1 = None
