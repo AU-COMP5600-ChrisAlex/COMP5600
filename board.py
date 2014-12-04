@@ -49,7 +49,9 @@ class Board:
             raise IndexError(s + ": Invalid Bin: " + str(bin) + "\n" + str(self))
 
         if self.getBin(player,bin+1) == 0:
-            raise RuntimeError("Illegal Move - Bin contains 0 pebbles")
+            if player == gameconstants.TOP_PLAYER: s = "P1"
+            else: s="p2"
+            raise RuntimeError(s + ": Illegal Move: "+ str(bin) + " Bin contains 0 pebbles\n" + str(self))
 
         # create new board state
         newBoardState = Board(self.p1, self.p2)

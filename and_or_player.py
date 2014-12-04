@@ -32,44 +32,26 @@ class And_Or_Player(Player):
     		possBoardStates.append(board.move(self.player, (i+1)))
 
     	# check to see if end
-    	if depth == gameconstants.numPlys:
-
+        hVals = []
+    	if depth >= gameconstants.numPlys:
     		# if so return the worst, since we are assuming the oppent
     		# will play as well as possible
     		# get heuristic values
-	    	hVals = []
 	    	for i in possBoardStates:
 	    		hVals.append(Heuristic.getValue(i, self.player))
-
-	    	# determine the worst (for the AI player)
-	    	worst = hVals[0];
-	    	worstMoveIndex = 0
-	    	for i in range(1, len(hVals)):
-	    		if hVals[i] < worst:
-	    			worst = hVals[i]
-	    			worstMoveIndex = i
-
-	    	worstMove = possMoves[worstMoveIndex]
-    		return (worstMove, hVals[worstMoveIndex])
-    	else:
+        else:
     		depth = depth + 1
+    		# get the hVals
+                for b in possBoardStates:
+                        m,h=self.orMove(b, depth)
+                        hVals.append(h)
 
-    		# get the responses
-    		responses = []
-    		for i in range(0, len(possMoves)):
-    			responses.append(self.orMove(board, depth))
+        # determine the worst (for the AI player)
+        worst = hVals[0];
+        for h in hVals:
+            if h < worst: worst = h
 
-    		# find the worst
-    		worst = responses[0][1]
-    		worstMoveIndex = 0
-    		for i in range(0, len(responses)):
-    			if responses[i][1] < worst:
-    				worst = responses[i][1]
-    				worstMoveIndex = i
-
-    		worstMove = possMoves[worstMoveIndex]
-    		return (worstMove, responses[worstMoveIndex][1])
-
+        return worst
 
     # Or is for the AI
     def orMove(self, board, depth):
@@ -86,27 +68,28 @@ class And_Or_Player(Player):
     	for i in possMoves:
     		possBoardStates.append(board.move(self.player, (i+1)))
 
-    	# get heuristic values
-    	hVals = []
-    	for i in possBoardStates:
-    		hVals.append(Heuristic.getValue(i, self.player))
-
-    	# determine the best
-    	best = hVals[0];
-    	bestMoveIndex = 0
-    	for i in range(1, len(hVals)):
-    		if hVals[i] > best:
-    			best = hVals[i]
-    			bestMoveIndex = i
-
     	# check if the end
-    	if depth == gameconstants.numPlys:
-    		bestMove = possMoves[bestMoveIndex]
-    		return (bestMove, hVals[bestMoveIndex])
-    	else:
-    		depth = depth + 1
-    		return self.andMove(possBoardStates[bestMoveIndex], depth)
+        hVals = []
+    	if depth >= gameconstants.numPlys:
+            # get heuristic values
+            for b in possBoardStates:
+                    hVals.append(Heuristic.getValue(b, self.player))
+   	else:
+            depth = depth + 1
+            for b in possBoardStates:
+                hVals.append(self.andMove(b, depth))
 
+        # determine the best
+        best = hVals[0];
+        bestMoveIndex = 0
+        for i in range(1, len(hVals)):
+                if hVals[i] > best:
+                        best = hVals[i]
+                        bestMoveIndex = i
+
+        bestMove = possMoves[bestMoveIndex]
+        return (bestMove, hVals[bestMoveIndex])
+ 
     def __str__(self):
         return "And-Or Algorithm"
 
