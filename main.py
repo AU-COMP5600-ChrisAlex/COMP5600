@@ -18,7 +18,8 @@ def startProg(screen):
     
     global askUser
 
-    ui = UI(screen,askUser);
+    if not gameconstants.ghost:
+        ui = UI(screen,askUser);
 
     if not askUser:
         if gameconstants.p1 == None:
@@ -29,53 +30,50 @@ def startProg(screen):
     if gameconstants.p1 == None: raise RuntimeError("P1 cannot be None!")           
     if gameconstants.p2 == None: raise RuntimeError("P2 cannot be None!")           
 
-    UI.debug("Game paramaters:")
-    UI.debug("\tRows:    " + str(gameconstants.numRows))
-    UI.debug("\tPebbles: " + str(gameconstants.numPebbles))
-    UI.debug("\tp1:      " + str(gameconstants.p1))
-    UI.debug("\tp2:      " + str(gameconstants.p2))
-    UI.debug("\tPlys:    " + str(gameconstants.numPlys))
-    UI.debug("\tStep:    " + str(gameconstants.stepThrough))
-
     b = Board();
-    ui.drawState(b)
-
+    if not gameconstants.ghost:
+        ui.drawState(b)
+    else:
+        UI.printInstructions("Ghost Mode")
 
     plyCount = 0
     starttime = time.time()
     startcputime = time.clock()
     while True:
         #check to see if we should pause before we move
-        ui.printTurn(gameconstants.p1)
+        if not gameconstants.ghost: ui.printTurn(gameconstants.p1)
+
         if gameconstants.stepThrough and gameconstants.p1.isComputer():
             pause()
         b = b.move(gameconstants.p1.player, gameconstants.p1.move(b))
         plyCount = plyCount + 1
-        ui.drawState(b)
+
+        if not gameconstants.ghost: ui.drawState(b)
 
         if b.isWon():
             endtime = time.time()
             endcputime = time.clock()
-            ui.printWinMessage(b.whoWon())
+            if not gameconstants.ghost: ui.printWinMessage(b.whoWon())
             pause()
             break
 
-        ui.printTurn(gameconstants.p2)
+        if not gameconstants.ghost: ui.printTurn(gameconstants.p2)
         if gameconstants.stepThrough and gameconstants.p2.isComputer():
             pause()
         b = b.move(gameconstants.p2.player, gameconstants.p2.move(b))
         plyCount = plyCount + 1
-        ui.drawState(b)
+        if not gameconstants.ghost: ui.drawState(b)
 
         if b.isWon():
             endtime = time.time()
             endcputime = time.clock()
-            ui.printWinMessage(b.whoWon())
+            if not gameconstants.ghost: ui.printWinMessage(b.whoWon())
             pause()
             break
 
 
-    curses.endwin()
+    if not gameconstants.ghost:
+        curses.endwin()
     try:
         #output some statistics
         statFile = open(gameconstants.statsFile, "a")
@@ -105,7 +103,6 @@ def startProg(screen):
     except Exception as e:
         print "Problem writing stats file!"
         print e
-
 
     print "------------------------------------"
     print "END OF GAME STATISTICS:"
@@ -214,7 +211,10 @@ if __name__ == "__main__":
 
   
     try:
-        curses.wrapper(startProg)
+        if not gameconstants.ghost:
+            curses.wrapper(startProg)
+        else:
+            startProg(None)
     except KeyboardInterrupt:
         print "Keyboard Interrupt"
 
