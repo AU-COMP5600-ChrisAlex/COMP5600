@@ -312,7 +312,7 @@ class UI:
         #get run/step
         if gameconstants.stepThrough == None:
             s = self.optionInput(6,31,5,["run", "step"])
-            if s == "run": gameconstants.stepThrough = True
+            if s == "step": gameconstants.stepThrough = True
             else:          gameconstants.stepThrough = False
 
 
