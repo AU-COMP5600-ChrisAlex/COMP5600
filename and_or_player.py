@@ -4,6 +4,7 @@ from player import Player
 from heuristic import Heuristic
 import gameconstants
 import ui
+import time
 
 class And_Or_Player(Player):
 
@@ -12,7 +13,15 @@ class And_Or_Player(Player):
 
 
     def move(self, board): 
+        start_time = time.time()
         bestMove = self.orMove(board, 1)
+        end_time = time.time()
+        log = (str(board.getCols()) + ", " + str(gameconstants.numPlys) 
+            + ", " + str(end_time - start_time) + "\n")
+        # w for writing
+        with open("and_or_times.txt", "a") as andOrFile:
+            andOrFile.write(log)
+
         return bestMove[0]
 
     # And is for the oppenent
@@ -83,12 +92,13 @@ class And_Or_Player(Player):
                 hVals.append(self.andMove(b, depth))
 
         # determine the best
-        best = hVals[0];
-        bestMoveIndex = 0
-        for i in range(1, len(hVals)):
-                if hVals[i] > best:
-                        best = hVals[i]
-                        bestMoveIndex = i
+        if (len(hVals) > 0):
+            best = hVals[0]
+            bestMoveIndex = 0
+            for i in range(1, len(hVals)):
+                    if hVals[i] > best:
+                            best = hVals[i]
+                            bestMoveIndex = i
 
         bestMove = possMoves[bestMoveIndex]
         return (bestMove, hVals[bestMoveIndex])
