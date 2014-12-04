@@ -10,7 +10,33 @@
 
 
 
+#runs 10 times (for statistical reasons), with specified options
+#runs with players in both positions
 
-for i in $(seq 1 10); do
-    ./main.py -p 4 -r 4 -e 4 -t minmax -b andor -g --ghost
+#makeRun [depth] [rows] [pebbles] [top_player] [bottom_player]
+
+makeRun() {
+    echo "hi there!"
+    #for i in $(seq 1 10); do
+    #    ./main.py -p $1 -r $2 -e $3 -t minmax -b andor  -g --ghost
+    #    ./main.py -p $1 -r $2 -e $3 -t andor  -b minmax -g --ghost
+    #done
+
+}
+
+
+
+
+#different depths
+for depth in $(seq 1 9); do
+    for rows in $(seq 3 10); do
+        seq 1 10 | xargs -t -n 1 makeRun $depth $rows 
+    done
 done
+
+
+
+
+
+
+
