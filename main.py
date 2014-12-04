@@ -167,11 +167,11 @@ if __name__ == "__main__":
             UI.debug("Using default game paramaters:")
             break
         elif opt in ("-p", "--numplys"):
-            gameconstants.numPlys = arg
+            gameconstants.numPlys = int(arg)
         elif opt in ("-r", "--numrows"):
-            gameconstants.numRows = arg 
+            gameconstants.numRows = int(arg) 
         elif opt in ("-e", "--numpebbles"):
-            gameconstants.numPebbles = arg
+            gameconstants.numPebbles = int(arg)
         elif opt in ("-s", "--step"):
             if gameconstants.stepThrough == None:
                 gameconstants.stepThrough  = True

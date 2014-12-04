@@ -62,4 +62,4 @@ target/
 dbgout
 stats.csv
 and_or_times.csv
-alpha_beta_time.csv
+alpha_beta_times.csv

@@ -254,10 +254,10 @@ class UI:
 
         UI.stdscr.addstr(1,1, "Number of Rows              : ")
         if gameconstants.numRows!= 0:
-            UI.stdscr.addstr(1, 31, gameconstants.numRows)
+            UI.stdscr.addstr(1, 31, str(gameconstants.numRows))
         UI.stdscr.addstr(2,1, "Number of Pebbles           : ")
         if gameconstants.numPebbles != 0:
-            UI.stdscr.addstr(2, 31, gameconstants.numPebbles)
+            UI.stdscr.addstr(2, 31, str(gameconstants.numPebbles))
         UI.stdscr.addstr(3,1, "P1 [human/minmax/andor]     : " ,curses.color_pair(UI.TOP_P_COLOR))
         if gameconstants.p1 != None:
             if gameconstants.p1 == "":
@@ -270,7 +270,7 @@ class UI:
             UI.stdscr.addstr(4,31, gameconstants.p2.optName())
         UI.stdscr.addstr(5,1, "Number of Plys              : ")
         if gameconstants.numPlys != 0:
-            UI.stdscr.addstr(5, 31, gameconstants.numPlys)
+            UI.stdscr.addstr(5, 31, str(gameconstants.numPlys))
         UI.stdscr.addstr(6,1, "Run/Step                    : ")
         if gameconstants.stepThrough != None:
             if gameconstants.stepThrough:
