@@ -4,6 +4,7 @@ from player import Player
 from heuristic import Heuristic
 import gameconstants
 import ui
+import time
 
 class And_Or_Player(Player):
 
@@ -12,7 +13,15 @@ class And_Or_Player(Player):
 
 
     def move(self, board): 
+        start_time = time.time()
         bestMove = self.orMove(board, 1)
+        end_time = time.time()
+        log = (str(board.getCols()) + ", " + str(gameconstants.numPlys) 
+            + ", " + str(end_time - start_time) + "\n")
+        # w for writing
+        with open("and_or_times.txt", "a") as andOrFile:
+            andOrFile.write(log)
+
         return bestMove[0]
 
     # And is for the oppenent
@@ -42,8 +51,11 @@ class And_Or_Player(Player):
     		depth = depth + 1
     		# get the hVals
                 for b in possBoardStates:
-                        m,h=self.orMove(b, depth)
-                        hVals.append(h)
+                        if b.isWon():
+                            hVals.append(Heuristic.getValue(b, self.player))
+                        else:
+                            m,h=self.orMove(b, depth)
+                            hVals.append(h)
 
         # determine the worst (for the AI player)
         worst = hVals[0];
@@ -64,7 +76,10 @@ class And_Or_Player(Player):
     		if curBin != 0:
     			possMoves.append(i)
 
-    	ui.UI.debug("possible moves : " + str(possMoves))
+        # if no possible moves return
+        if (len(possMoves) == 0):
+            return None
+    	#ui.UI.debug("possible moves : " + str(possMoves))
 
     	# generate all possible board states
     	possBoardStates = []
@@ -80,10 +95,12 @@ class And_Or_Player(Player):
    	else:
             depth = depth + 1
             for b in possBoardStates:
-                hVals.append(self.andMove(b, depth))
+                if (b.isWon()):
+                    hVals.append(Heuristic.getValue(b, self.player))
+                else:
+                    hVals.append(self.andMove(b, depth))
 
-        # determine the best
-        best = hVals[0];
+        best = hVals[0]
         bestMoveIndex = 0
         for i in range(1, len(hVals)):
                 if hVals[i] > best:
