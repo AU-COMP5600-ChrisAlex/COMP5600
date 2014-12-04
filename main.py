@@ -132,14 +132,16 @@ def pause(s="Press any key to continue..."):
 
 
 def usage(): 
-    print "-h [--help]     : Print this message"  
-    print "-d [--defaults]   : For debug. Sets user input values to defaults, does not ask for input"
+    print "-h [--help]        : Print this message"  
+    print "-d [--defaults]    : For debug. Sets user input values to defaults, does not ask for input"
     print "-p [--numplys=]    : Specify the number of Plys.    Argument is [1-50]"
     print "-r [--numrows=]    : Specify the number of rows.    Argument is [2-10]"
     print "-e [--numpebbles=] : Specify the number of pebbles. Argument is [0-1000]"
     print "-s [--step]        : Step through game"
+    print "-g [--run]         : Do not step through game (go)"
     print "-t [--p1=]         : Specify player 1 ([t]op player).     Options are: [human, minmax, andor]"
     print "-b [--p2=]         : Specify player 2 ([b]ottom player).  Options are: [human, minmax, andor]"
+    print "-z [--ghost]       : Run without a UI. Must specify all other options and -r to use ghost mode"
 
 if __name__ == "__main__":
 
