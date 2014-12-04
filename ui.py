@@ -43,7 +43,7 @@ class UI:
 
     _usererrorline = 10
     _debugstart = 11
-    _debugsize = 15
+    _debugsize = 25
     _debugend = _debugstart - 1
 
     _winnerline = 11
@@ -73,7 +73,7 @@ class UI:
                 if UI._debugstart >= y:
                     UI.printUIError("Terminal Window too small for debug output!")
                     return
-                else: clearUIError()
+                else: UI.clearUIError()
 
                 moveup = False
                 if UI._debugend < UI._debugstart + UI._debugsize:
