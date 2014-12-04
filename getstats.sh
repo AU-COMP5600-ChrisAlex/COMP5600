@@ -12,5 +12,5 @@
 
 
 for i in $(seq 1 10); do
-    ./main.py -p 4 -r 4 -e 4 -t minmax -b andor -g
+    ./main.py -p 4 -r 4 -e 4 -t minmax -b andor -g --ghost
 done

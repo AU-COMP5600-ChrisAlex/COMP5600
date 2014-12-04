@@ -147,7 +147,7 @@ def usage():
 if __name__ == "__main__":
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:sgt:b:",["help","defaults","numplys=", "numrows=", "numpebbles=", "step","run","p1=","p2=","ghost"])
+        opts, args = getopt.getopt(sys.argv[1:],"hdp:r:e:sgt:b:z",["help","defaults","numplys=", "numrows=", "numpebbles=", "step","run","p1=","p2=","ghost"])
     except getopt.GetoptError as err:
         print str(err);
         usage()
@@ -205,7 +205,7 @@ if __name__ == "__main__":
                 print "Invalid argument: ", arg, " for option ", opt
                 print "\tValid arguments are: [human, minmax, andor]"
                 sys.exit(2)
-        if opt in ("--ghost"):
+        elif opt in ("-z", "--ghost"):
             gameconstants.ghost= True
         else:
             print "Unrecognized option: ", opt
