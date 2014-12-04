@@ -53,7 +53,7 @@ class Alpha_Beta_Player(Player):
         log = (str(board.getCols()) + ", " + str(gameconstants.numPlys) 
             + ", " + str(end_time - start_time) + "\n")
         # w for writing
-        with open("alpha_beta_times.txt", "a") as alphaBetaFile:
+        with open("alpha_beta_times.csv", "a") as alphaBetaFile:
             alphaBetaFile.write(log)
 
         return a
