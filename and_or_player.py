@@ -19,7 +19,7 @@ class And_Or_Player(Player):
         log = (str(board.getCols()) + ", " + str(gameconstants.numPlys) 
             + ", " + str(end_time - start_time) + "\n")
         # w for writing
-        with open("and_or_times.txt", "a") as andOrFile:
+        with open("and_or_times.csv", "a") as andOrFile:
             andOrFile.write(log)
 
         return bestMove[0]

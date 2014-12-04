@@ -61,6 +61,5 @@ target/
 #debug files
 dbgout
 stats.csv
-and_or_times.txt
-alpha_beta_times.txt
-
+and_or_times.csv
+alpha_beta_time.csv
