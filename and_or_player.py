@@ -11,9 +11,8 @@ class And_Or_Player(Player):
         Player.__init__(self, player_num=player)
 
 
-    def move(self, board):
+    def move(self, board): 
         bestMove = self.orMove(board, 1)
-        ui.UI.debug("chose : " + str(bestMove))
         return bestMove[0]
 
     # And is for the oppenent
@@ -58,15 +57,19 @@ class And_Or_Player(Player):
 
     	# find the possible moves
     	possMoves = []
-    	for i in range(0, board.getCols()):
-    		curBin = board.getBin(self.player, (i+1))
+    	# index for get bin starts at 1
+    	for i in range(1, board.getCols()+1):
+    		curBin = board.getBin(self.player, (i))
+    		#ui.UI.debug("bin @ " + str(i) + " has " + str(curBin))
     		if curBin != 0:
     			possMoves.append(i)
+
+    	ui.UI.debug("possible moves : " + str(possMoves))
 
     	# generate all possible board states
     	possBoardStates = []
     	for i in possMoves:
-    		possBoardStates.append(board.move(self.player, (i+1)))
+    		possBoardStates.append(board.move(self.player, (i)))
 
     	# check if the end
         hVals = []
