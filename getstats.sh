@@ -16,21 +16,20 @@
 #makeRun [depth] [rows] [pebbles] [top_player] [bottom_player]
 
 makeRun() {
-    echo "hi there!"
-    #for i in $(seq 1 10); do
-    #    ./main.py -p $1 -r $2 -e $3 -t minmax -b andor  -g --ghost
-    #    ./main.py -p $1 -r $2 -e $3 -t andor  -b minmax -g --ghost
-    #done
-
+   for i in $(seq 1 10); do
+       ./main.py -p $1 -r $2 -e $3 -t minmax -b andor  -g --ghost
+       ./main.py -p $1 -r $2 -e $3 -t andor  -b minmax -g --ghost
+   done
 }
 
 
+export -f makeRun
 
 
 #different depths
 for depth in $(seq 1 9); do
     for rows in $(seq 3 10); do
-        seq 1 10 | xargs -t -n 1 makeRun $depth $rows 
+        seq 1 10 | xargs -P 8 -i -n 1 bash -c "makeRun $depth $rows {}"
     done
 done
 
