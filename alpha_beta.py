@@ -6,6 +6,7 @@ import gameconstants
 from player import Player
 from operator import itemgetter
 from sys import maxint
+import time
 
 
 
@@ -26,6 +27,8 @@ class Alpha_Beta_Player(Player):
     #returns integer representing which bin to move
     def move(self, board):
 
+        start_time = time.time()
+
         alpha = -maxint-1
         beta = maxint
         v = -maxint-1
@@ -45,6 +48,13 @@ class Alpha_Beta_Player(Player):
                 a = m
             if v >= beta: return a
             elif v > alpha: alpha = v
+
+        end_time = time.time()
+        log = (str(board.getCols()) + ", " + str(gameconstants.numPlys) 
+            + ", " + str(end_time - start_time) + "\n")
+        # w for writing
+        with open("alpha_beta_times.txt", "a") as alphaBetaFile:
+            alphaBetaFile.write(log)
 
         return a
 
