@@ -112,8 +112,8 @@ class Board:
 
     #TODO: MAKE FASTER WITH NUMPY
     def whoWon(self):
-        if sum(self.p1) == 0: return gameconstants.TOP_PLAYER
-        elif sum(self.p2) == 0: return gameconstants.BOTTOM_PLAYER
+        if sum(self.p2) == 0: return gameconstants.TOP_PLAYER
+        elif sum(self.p1) == 0: return gameconstants.BOTTOM_PLAYER
         else: return -1
 
     def getPlayer(self, player):
