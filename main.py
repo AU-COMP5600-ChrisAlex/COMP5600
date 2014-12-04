@@ -48,7 +48,7 @@ def startProg(screen):
         ui.drawState(b)
 
         if b.isWon():
-            ui.printWinMessage(b.whoWon)
+            ui.printWinMessage(b.whoWon())
             pause()
             break
 
@@ -59,7 +59,7 @@ def startProg(screen):
         ui.drawState(b)
 
         if b.isWon():
-            ui.printWinMessage(b.whoWon)
+            ui.printWinMessage(b.whoWon())
             pause()
             break
 
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         elif opt in ("-d", "--defaults"):
             gameconstants.numRows = 4 
             gameconstants.numPebbles = 4
-            gameconstants.p1 = and_or_player.And_Or_Player(gameconstants.TOP_PLAYER) 
+            gameconstants.p1 = alpha_beta.Alpha_Beta_Player(gameconstants.TOP_PLAYER) 
             gameconstants.p2 = None 
             gameconstants.numPlys = 4
             gameconstants.stepThrough = True

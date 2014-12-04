@@ -191,9 +191,9 @@ class UI:
         UI.stdscr.insstr("It's ",curses.color_pair(UI.TURN_COLOR))
 
     def printWinMessage(self, whoWon):
-        UI.stdscr.move(UI._winnerline ,UI._winnercol)
+        UI.stdscr.move(UI._winnerline ,0)
         UI.stdscr.clrtoeol()
-
+        UI.stdscr.move(UI._winnerline ,UI._winnercol)
 
         UI.stdscr.insstr(" You Won!!!!",curses.color_pair(UI.WIN_COLOR))
 
