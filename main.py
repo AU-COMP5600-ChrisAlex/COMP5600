@@ -9,6 +9,7 @@ import human_player
 import and_or_player
 import sys, getopt
 import os, stat
+import time
 
 
 askUser = True
@@ -41,6 +42,8 @@ def startProg(screen):
 
 
     plyCount = 0
+    starttime = time.time()
+    startcputime = time.clock()
     while True:
         #check to see if we should pause before we move
         ui.printTurn(gameconstants.p1)
@@ -51,6 +54,8 @@ def startProg(screen):
         ui.drawState(b)
 
         if b.isWon():
+            endtime = time.time()
+            endcputime = time.clock()
             ui.printWinMessage(b.whoWon())
             pause()
             break
@@ -63,6 +68,8 @@ def startProg(screen):
         ui.drawState(b)
 
         if b.isWon():
+            endtime = time.time()
+            endcputime = time.clock()
             ui.printWinMessage(b.whoWon())
             pause()
             break
@@ -72,19 +79,25 @@ def startProg(screen):
     statFile = open(gameconstants.statsFile, "a")
     if os.stat(gameconstants.statsFile)[stat.ST_SIZE]==0:
         #print the header
-        statFile.write("Rows,Pebbles,P1,P2,Depth,Runtime,plycount\n");
+        statFile.write("Rows,Pebbles,P1,P2,Depth,Runtime,CPU time,plycount,winner\n");
 
     #print the statistics
-    statFile.write(str(gameconstants.numRows))
-    statFile.write(str(gameconstants.numPebbles))
-    statFile.write(str(gameconstants.p1))
-    statFile.write(str(gameconstants.p2))
-    statFile.write(str(gameconstants.numPlys))
-    statFile.write(str(gameconstants.stepThrough))
-    statFile.write(str("RUNTIME HERE"))
-    statFile.write(str(plyCount))
+    statFile.write(str(gameconstants.numRows) + ",")          #rows
+    statFile.write(str(gameconstants.numPebbles) + ",")       #pebbles
+    statFile.write(str(gameconstants.p1) + ",")               #p1
+    statFile.write(str(gameconstants.p2) + ",")               #p2
+    statFile.write(str(gameconstants.numPlys) + ",")          #depth
+    statFile.write(str(endtime-starttime) + ",")              #runtime
+    statFile.write(str(endcputime-startcputime) + ",")        #CPU time
+    statFile.write(str(plyCount)+ ",")                        #plycount
+    if b.whoWon() == gameconstants.TOP_PLAYER:                #winner
+        statFile.write(str(gameconstants.p1) + ",")
+    elif b.whoWon() == gameconstants.BOTTOM_PLAYER:
+        statFile.write(str(gameconstants.p2) + ",")
+    else:
+        statFile.write("?" + ",")
 
-
+    statFile.write("\n")
     statFile.flush()
     statFile.close()
 
