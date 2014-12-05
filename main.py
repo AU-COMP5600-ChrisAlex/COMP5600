@@ -71,6 +71,12 @@ def startProg(screen):
             pause()
             break
 
+        if plyCount > 10000:
+            #assume infinite loop 
+            endtime = time.time()
+            endcputime = time.clock()
+            break
+
 
     if not gameconstants.ghost:
         curses.endwin()
